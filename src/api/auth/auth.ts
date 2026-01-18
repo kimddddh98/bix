@@ -1,0 +1,87 @@
+import axios from 'axios'
+import http from '../axios'
+
+export const AUTH_BASE = '/auth'
+export const SERVER_AUTH_BASE = '/api/auth'
+
+export const AUTH_ENDPOINTS = {
+  SIGN_IN: `${AUTH_BASE}/signin`,
+  SERVER_SIGNIN: `${SERVER_AUTH_BASE}/signin`,
+  SIGN_UP: `${AUTH_BASE}/signup`,
+  ROTEATE_TOKEN: `${AUTH_BASE}/refresh`,
+  SERVER_ROTEATE_TOKEN: `${SERVER_AUTH_BASE}/refresh`,
+  LOGOUT: `${SERVER_AUTH_BASE}/logout`,
+} as const
+
+export interface SignUpRequestParams {
+  /* 
+    username : 이메일
+   */
+  username: string
+  /* 
+    name : 사용자 이름
+   */
+  name: string
+  /* 
+    password & confirmPassword: 8자 이상, 숫자, 영문자, 특수문자(!%*#?&) 1개 이상의 조합
+  */
+  password: string
+  confirmPassword: string
+}
+
+export type SignInRequestParams = Pick<
+  SignUpRequestParams,
+  'username' | 'password'
+>
+
+export interface SignInResponse {
+  accessToken: string
+  refreshToken: string
+}
+
+const signIn = async (params: SignInRequestParams) => {
+  const response = await http.post<SignInResponse>(
+    AUTH_ENDPOINTS.SIGN_IN,
+    params
+  )
+  return response.data
+}
+
+// next 서버 호출 및 토큰 쿠키에 저장 용도
+const signInApi = async (params: SignInRequestParams) => {
+  const data = await axios.post<SignInResponse>(
+    AUTH_ENDPOINTS.SERVER_SIGNIN,
+    params
+  )
+  return data.data
+}
+
+const signUp = async (params: SignUpRequestParams) => {
+  const response = await http.post(AUTH_ENDPOINTS.SIGN_UP, params)
+  console.log('signUp', response.data)
+  return response.data
+}
+
+const rotateToken = async (refreshToken: string) => {
+  const response = await http.post<SignInResponse>(
+    AUTH_ENDPOINTS.ROTEATE_TOKEN,
+    {
+      refreshToken,
+    }
+  )
+  return response.data
+}
+
+const rotateTokenApi = async () => {
+  const response = await axios.post<SignInResponse>(
+    AUTH_ENDPOINTS.SERVER_ROTEATE_TOKEN
+  )
+  return response.data
+}
+
+const logout = async () => {
+  const response = await axios.post(AUTH_ENDPOINTS.LOGOUT)
+  return response.data
+}
+
+export { signIn, signUp, signInApi, rotateToken, rotateTokenApi, logout }
