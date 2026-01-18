@@ -1,0 +1,101 @@
+'use client'
+
+import { useForm } from 'react-hook-form'
+import Link from 'next/link'
+import { SignInRequestParams } from '@/api/auth/auth'
+import useSignInMutation from '@/hooks/mutations/useSignInMutation'
+import { useRouter } from 'next/navigation'
+
+export default function SignIn() {
+  const { mutate } = useSignInMutation()
+  const router = useRouter()
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<SignInRequestParams>({
+    mode: 'onSubmit',
+  })
+
+  const onSubmit = async (value: SignInRequestParams) => {
+    mutate(value, {
+      onSuccess: () => {
+        router.push('/')
+      },
+    })
+  }
+
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4">
+      <div className="w-full max-w-sm rounded-2xl bg-white p-6 shadow">
+        <h1 className="mb-6 text-center text-2xl font-semibold">로그인</h1>
+
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
+          <div className="flex flex-col gap-2">
+            <label className="text-sm font-medium text-gray-800">이메일</label>
+            <div>
+              <input
+                type="email"
+                placeholder="이메일을 입력해주세요"
+                className={`focus:border-primary w-full rounded-md border px-3 py-2 text-sm ${errors.username ? 'border-red-500' : 'border-gray-400'}`}
+                {...register('username', {
+                  required: '이메일을 입력해주세요.',
+                  pattern: {
+                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                    message: '올바른 이메일 형식이 아닙니다',
+                  },
+                })}
+              />
+              {errors.username && (
+                <p className="mt-1 text-xs text-red-500">
+                  {errors.username.message}
+                </p>
+              )}
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <label className="text-sm font-medium text-gray-800">
+              비밀번호
+            </label>
+            <input
+              placeholder="비밀번호를 입력해주세요"
+              type="password"
+              className={`focus:border-primary rounded-md border px-3 py-2 text-sm ${errors.password ? 'border-red-500' : 'border-gray-400'}`}
+              {...register('password', {
+                required: '비밀번호를 입력해주세요',
+                minLength: {
+                  value: 6,
+                  message: '비밀번호는 최소 6자 이상입니다',
+                },
+              })}
+            />
+            {errors.password && (
+              <p className="mt-1 text-xs text-red-500">
+                {errors.password.message}
+              </p>
+            )}
+          </div>
+
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="bg-primary enabled:hover:bg-primary-hover w-full rounded-lg py-2 text-sm font-medium text-white disabled:opacity-50"
+          >
+            로그인
+          </button>
+        </form>
+
+        <div className="mt-6 text-center text-sm text-gray-600">
+          아직 계정이 없으신가요?{' '}
+          <Link
+            href="/signup"
+            className="text-primary font-medium hover:underline"
+          >
+            회원가입
+          </Link>
+        </div>
+      </div>
+    </div>
+  )
+}
