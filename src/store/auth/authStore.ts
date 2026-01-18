@@ -1,6 +1,5 @@
-import { setAccessToken } from '@/api/auth/auth'
 import { create } from 'zustand'
-import { createJSONStorage, persist } from 'zustand/middleware'
+import { persist } from 'zustand/middleware'
 
 interface AuthState {
   accessToken: string | null
