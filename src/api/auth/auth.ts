@@ -49,16 +49,15 @@ const signIn = async (params: SignInRequestParams) => {
 
 // next 서버 호출 및 토큰 쿠키에 저장 용도
 const signInApi = async (params: SignInRequestParams) => {
-  const data = await axios.post<SignInResponse>(
+  const response = await axios.post<SignInResponse>(
     AUTH_ENDPOINTS.SERVER_SIGNIN,
     params
   )
-  return data.data
+  return response.data
 }
 
 const signUp = async (params: SignUpRequestParams) => {
   const response = await http.post(AUTH_ENDPOINTS.SIGN_UP, params)
-  console.log('signUp', response.data)
   return response.data
 }
 
