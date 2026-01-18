@@ -1,14 +1,18 @@
-// proxy.ts in Next.js 16
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
+import { PROTECTED_ROUTES, ROUTES } from './const/route.const'
 
 export default function proxy(request: NextRequest) {
-  // Your existing logic for rewrites, redirects, headers, etc.
-  // return NextResponse.redirect(new URL('', request.url))
+  const { nextUrl, cookies } = request
+  console.log('프록시 동작')
+  const refreshToken = cookies.get('refreshToken')
+  console.log('refreshToken', refreshToken)
 
-  const refreshToken = request.cookies.get('refreshToken')
+  if (nextUrl.pathname === ROUTES.SIGN_IN && refreshToken) {
+    return NextResponse.redirect(new URL('/', request.url))
+  }
 
-  if (!refreshToken) {
+  if (nextUrl.pathname === ROUTES.HOME && !refreshToken) {
     return NextResponse.redirect(new URL('/signin', request.url))
   }
 
@@ -17,5 +21,5 @@ export default function proxy(request: NextRequest) {
 
 // Optional: Define paths for the proxy to run on
 export const config = {
-  matcher: ['/'],
+  matcher: ['/((?!api|_next/static|_next/image|.*\\.png$).*)'],
 }
