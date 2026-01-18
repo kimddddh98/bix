@@ -1,4 +1,8 @@
-import { SignInRequestParams, SignUpRequestParams } from '@/api/auth/auth'
+import {
+  rotateTokenApi,
+  SignInRequestParams,
+  SignUpRequestParams,
+} from '@/api/auth/auth'
 import useSignInMutation from '../mutations/useSignInMutation'
 import { useRouter } from 'next/navigation'
 import { useAuthActions } from '@/store/auth/authStore'
@@ -27,9 +31,15 @@ const useAuth = () => {
     })
   }
 
+  const getRotateToken = async () => {
+    const data = await rotateTokenApi()
+    setAccessToken(data.accessToken)
+  }
+
   return {
     onSubmitLogin,
     onSubmitSignUp,
+    getRotateToken,
   }
 }
 
