@@ -19,7 +19,6 @@ http.interceptors.request.use(
     }
 
     if (config.url && !config.url.startsWith(URL.apiRouteUrl)) {
-      console.log({ url: config.url })
       config.url = URL.baseUrl + config.url
     }
     return config

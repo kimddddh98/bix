@@ -4,9 +4,7 @@ import { PROTECTED_ROUTES, ROUTES } from './const/route.const'
 
 export default function proxy(request: NextRequest) {
   const { nextUrl, cookies } = request
-  console.log('프록시 동작')
   const refreshToken = cookies.get('refreshToken')
-  console.log('refreshToken', refreshToken)
 
   if (nextUrl.pathname === ROUTES.SIGN_IN && refreshToken) {
     return NextResponse.redirect(new URL('/', request.url))

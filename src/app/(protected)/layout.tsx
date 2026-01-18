@@ -27,7 +27,6 @@ export default function ProtectedLayout({
   }
 
   useEffect(() => {
-    console.log({ hasHydrated })
     if (!hasHydrated) return
     if (!accessToken) {
       checkToken()
