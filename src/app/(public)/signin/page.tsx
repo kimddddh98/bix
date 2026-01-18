@@ -3,12 +3,10 @@
 import { useForm } from 'react-hook-form'
 import Link from 'next/link'
 import { SignInRequestParams } from '@/api/auth/auth'
-import useSignInMutation from '@/hooks/mutations/useSignInMutation'
-import { useRouter } from 'next/navigation'
+import useAuth from '@/hooks/auth/useAuth'
 
 export default function SignIn() {
-  const { mutate } = useSignInMutation()
-  const router = useRouter()
+  const { onSubmitLogin } = useAuth()
   const {
     register,
     handleSubmit,
@@ -18,11 +16,7 @@ export default function SignIn() {
   })
 
   const onSubmit = async (value: SignInRequestParams) => {
-    mutate(value, {
-      onSuccess: () => {
-        router.push('/')
-      },
-    })
+    onSubmitLogin(value)
   }
 
   return (

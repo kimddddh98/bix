@@ -4,10 +4,10 @@
 import { useForm } from 'react-hook-form'
 import Link from 'next/link'
 import { SignUpRequestParams } from '@/api/auth/auth'
-import useSignUpMutation from '@/hooks/mutations/useSignUpMutation'
+import useAuth from '@/hooks/auth/useAuth'
 
 export default function SignupPage() {
-  const { mutate } = useSignUpMutation()
+  const { onSubmitSignUp } = useAuth()
   const {
     register,
     handleSubmit,
@@ -21,8 +21,7 @@ export default function SignupPage() {
   const password = watch('password')
 
   const onSubmit = (value: SignUpRequestParams) => {
-    console.log({ value })
-    mutate(value)
+    onSubmitSignUp(value)
   }
 
   return (
