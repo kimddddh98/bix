@@ -1,8 +1,11 @@
-import axios from 'axios'
+import URL from '@/const/urls.const'
 import http from '../axios'
+// import URL from '@/const/urls.const'
 
 export const AUTH_BASE = '/auth'
-export const SERVER_AUTH_BASE = '/api/auth'
+
+// next 서버 호출 및 토큰 쿠키에 저장 용도 route handler auth baseUrl
+export const SERVER_AUTH_BASE = `${URL.apiRouteUrl}/auth`
 
 export const AUTH_ENDPOINTS = {
   SIGN_IN: `${AUTH_BASE}/signin`,
@@ -10,7 +13,7 @@ export const AUTH_ENDPOINTS = {
   SIGN_UP: `${AUTH_BASE}/signup`,
   ROTEATE_TOKEN: `${AUTH_BASE}/refresh`,
   SERVER_ROTEATE_TOKEN: `${SERVER_AUTH_BASE}/refresh`,
-  LOGOUT: `${SERVER_AUTH_BASE}/logout`,
+  SERVER_LOGOUT: `${SERVER_AUTH_BASE}/logout`,
 } as const
 
 export interface SignUpRequestParams {
@@ -47,9 +50,8 @@ const signIn = async (params: SignInRequestParams) => {
   return response.data
 }
 
-// next 서버 호출 및 토큰 쿠키에 저장 용도
 const signInApi = async (params: SignInRequestParams) => {
-  const response = await axios.post<SignInResponse>(
+  const response = await http.post<SignInResponse>(
     AUTH_ENDPOINTS.SERVER_SIGNIN,
     params
   )
@@ -72,14 +74,14 @@ const rotateToken = async (refreshToken: string) => {
 }
 
 const rotateTokenApi = async () => {
-  const response = await axios.post<SignInResponse>(
+  const response = await http.post<SignInResponse>(
     AUTH_ENDPOINTS.SERVER_ROTEATE_TOKEN
   )
   return response.data
 }
 
 const logout = async () => {
-  const response = await axios.post(AUTH_ENDPOINTS.LOGOUT)
+  const response = await http.post(AUTH_ENDPOINTS.SERVER_LOGOUT)
   return response.data
 }
 

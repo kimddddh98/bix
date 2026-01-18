@@ -1,8 +1,9 @@
 import URL from '@/const/urls.const'
+import { useAuthStore } from '@/store/auth/authStore'
 import axios from 'axios'
+import { logout, rotateTokenApi } from './auth/auth'
 
 export const http = axios.create({
-  baseURL: URL.baseUrl,
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
@@ -11,6 +12,16 @@ export const http = axios.create({
 
 http.interceptors.request.use(
   async (config) => {
+    const token = useAuthStore.getState().accessToken
+
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`
+    }
+
+    if (config.url && !config.url.startsWith(URL.apiRouteUrl)) {
+      console.log({ url: config.url })
+      config.url = URL.baseUrl + config.url
+    }
     return config
   },
   (error) => {
@@ -21,6 +32,30 @@ http.interceptors.request.use(
 http.interceptors.response.use(
   (response) => response,
   async (error) => {
+    const originalRequest = error.config
+
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true
+
+      try {
+        const data = await rotateTokenApi()
+        const { accessToken } = data
+
+        useAuthStore.getState().actions.setAccessToken(accessToken)
+        originalRequest.headers.Authorization = `Bearer ${accessToken}`
+
+        return http(originalRequest)
+      } catch (error) {
+        useAuthStore.getState().actions.logout()
+        return Promise.reject(error)
+      }
+    }
+    if (error.response?.status === 401) {
+      useAuthStore.getState().actions.logout()
+      await logout()
+      window.location.href = '/signin'
+    }
+
     return Promise.reject(error)
   }
 )
