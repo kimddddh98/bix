@@ -21,29 +21,18 @@ export default function ProtectedLayout({
     try {
       await getRotateToken()
     } catch (e) {
-      console.log(e)
       logout()
       router.replace('/signin')
     }
   }
-  const test = async () => {
-    const res = await http.post('/api/test')
-  }
 
   useEffect(() => {
+    console.log({ hasHydrated })
     if (!hasHydrated) return
     if (!accessToken) {
       checkToken()
     }
-  }, [accessToken, hasHydrated])
+  }, [hasHydrated])
 
-  return (
-    <div>
-      여기는 레이아웃 {accessToken}
-      <button className="border" onClick={test}>
-        재발급 버튼
-      </button>
-      {children}
-    </div>
-  )
+  return <div>{children}</div>
 }
