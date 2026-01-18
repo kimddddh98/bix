@@ -24,3 +24,7 @@ textarea,
 select {
   @apply outline-none focus:ring-0 focus:outline-none;
 }
+
+button {
+  @apply cursor-pointer;
+}
