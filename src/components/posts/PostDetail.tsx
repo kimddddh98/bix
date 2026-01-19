@@ -2,6 +2,7 @@
 import useDeletePostMutation from '@/hooks/mutations/posts/useDeletePostMutation'
 import useCategoriesQuery from '@/hooks/queries/useCategoriesQuery'
 import usePostQuery from '@/hooks/queries/usePostQuery'
+import { formatPostDate } from '@/utiles'
 import { useParams, useRouter } from 'next/navigation'
 
 const PostDetail = () => {
@@ -18,7 +19,7 @@ const PostDetail = () => {
       <div className="mb-2 flex items-center gap-2 text-sm text-gray-500">
         <span>{category && data && category[data?.boardCategory]}</span>
         <span>·</span>
-        <span>2026.01.19</span>
+        <span>{data && formatPostDate(data?.createdAt)}</span>
       </div>
 
       <h2 className="mb-4 text-xl leading-snug font-semibold text-gray-900">

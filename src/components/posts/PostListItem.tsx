@@ -1,4 +1,5 @@
 import { Category, Posts } from '@/api/posts/posts'
+import { formatPostDate } from '@/utiles'
 import Link from 'next/link'
 
 type PostListItemProps = {
@@ -16,7 +17,9 @@ const PostListItem = ({ post, categories }: PostListItemProps) => {
         <span className="text-sm text-gray-500">
           {categories[post.category]}
         </span>
-        <span className="text-xs text-gray-400">{post.createdAt}</span>
+        <span className="text-xs text-gray-400">
+          {formatPostDate(post.createdAt)}
+        </span>
       </div>
       <h2 className="mb-1 text-base font-medium text-gray-900">{post.title}</h2>
     </Link>

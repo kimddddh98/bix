@@ -1,3 +1,4 @@
+import { createPostFormData } from '@/utiles'
 import http from '../axios'
 
 export const POSTS_ENDPOINTS = {
@@ -33,7 +34,13 @@ export type WritePostRequsetParams = Pick<Post, 'title' | 'content'> & {
 
 const getPostList = async () => {
   const response = await http.get<BaseResponse<Posts[]>>(
-    POSTS_ENDPOINTS.POST_LIST
+    POSTS_ENDPOINTS.POST_LIST,
+    {
+      params: {
+        page: 0,
+        size: 0,
+      },
+    }
   )
   return response.data
 }
@@ -49,14 +56,7 @@ const getCartegory = async () => {
 }
 
 const writePost = async (params: WritePostRequsetParams) => {
-  const formData = new FormData()
-
-  formData.append(
-    'request',
-    new Blob([JSON.stringify(params)], {
-      type: 'application/json',
-    })
-  )
+  const formData = createPostFormData(params)
 
   const response = await http.post<Pick<Posts, 'id'>>(
     POSTS_ENDPOINTS.POST_LIST,
@@ -71,14 +71,7 @@ const writePost = async (params: WritePostRequsetParams) => {
 }
 
 const editPost = async (id: number, params: WritePostRequsetParams) => {
-  const formData = new FormData()
-
-  formData.append(
-    'request',
-    new Blob([JSON.stringify(params)], {
-      type: 'application/json',
-    })
-  )
+  const formData = createPostFormData(params)
 
   await http.patch<0>(POSTS_ENDPOINTS.POST_LIST + `/${id}`, formData, {
     headers: {
