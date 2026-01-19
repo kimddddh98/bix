@@ -8,7 +8,10 @@ type PostListItemProps = {
 
 const PostListItem = ({ post, categories }: PostListItemProps) => {
   return (
-    <Link className="rounded-2xl bg-white p-4 shadow-sm" href={`/${post.id}`}>
+    <Link
+      className="rounded-2xl bg-white p-4 shadow-sm"
+      href={`/post/${post.id}`}
+    >
       <div className="mb-2 flex items-center justify-between">
         <span className="text-sm text-gray-500">
           {categories[post.category]}
