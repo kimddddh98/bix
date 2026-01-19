@@ -1,7 +1,7 @@
 // app/(auth)/signup/page.tsx
 'use client'
 
-import { useForm } from 'react-hook-form'
+import { useForm, useWatch } from 'react-hook-form'
 import Link from 'next/link'
 import { SignUpRequestParams } from '@/api/auth/auth'
 import useAuth from '@/hooks/auth/useAuth'
@@ -11,14 +11,17 @@ export default function SignupPage() {
   const {
     register,
     handleSubmit,
-    watch,
+    control,
     setFocus,
     formState: { errors, isSubmitting },
   } = useForm<SignUpRequestParams>({
     mode: 'onSubmit',
   })
 
-  const password = watch('password')
+  const password = useWatch({
+    control,
+    name: 'password',
+  })
 
   const onSubmit = (value: SignUpRequestParams) => {
     onSubmitSignUp(value)
