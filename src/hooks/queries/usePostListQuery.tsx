@@ -1,11 +1,18 @@
 import { getPostList } from '@/api/posts/posts'
 import { postsKey } from '@/const/query-key/postsKey'
-import { useQuery } from '@tanstack/react-query'
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
 
 const usePostListQuery = () => {
-  return useQuery({
+  return useInfiniteQuery({
     queryFn: getPostList,
     queryKey: postsKey.postList(),
+    initialPageParam: 0,
+    getNextPageParam: (lastPage) => {
+      // 🔥 여기 핵심
+      if (lastPage.last) return undefined
+      return lastPage.number + 1
+    },
+    select: (data) => data.pages.flatMap((r) => r.content),
   })
 }
 

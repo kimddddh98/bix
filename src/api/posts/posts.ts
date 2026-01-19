@@ -32,13 +32,13 @@ export type WritePostRequsetParams = Pick<Post, 'title' | 'content'> & {
   category: CategoryKey | ''
 }
 
-const getPostList = async () => {
-  const response = await http.get<BaseResponse<Posts[]>>(
+const getPostList = async ({ pageParam = 0 }: { pageParam: number }) => {
+  const response = await http.get<PagenationResponse<Posts[]>>(
     POSTS_ENDPOINTS.POST_LIST,
     {
       params: {
-        page: 0,
-        size: 0,
+        page: pageParam,
+        size: 20,
       },
     }
   )

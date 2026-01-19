@@ -5,11 +5,26 @@ import useCategoriesQuery from '@/hooks/queries/useCategoriesQuery'
 import usePostListQuery from '@/hooks/queries/usePostListQuery'
 import Link from 'next/link'
 import PostListSkeleton from './PostListSkeleton'
+import { useObserver } from '@/hooks/common/useObserver'
+import PostSkeleton from './PostSkeleton'
 
 const PostList = () => {
   const { data: categories } = useCategoriesQuery()
-  const { data, isPending } = usePostListQuery()
-  const posts = data?.content
+  const {
+    data: posts,
+    isPending,
+    fetchNextPage,
+    isFetching,
+    isFetchingNextPage,
+    hasNextPage,
+  } = usePostListQuery()
+
+  const { observerRef } = useObserver(() => {
+    if (!isFetchingNextPage || !isFetching) {
+      fetchNextPage()
+    }
+  }, hasNextPage)
+
   return (
     <div>
       {isPending ? (
@@ -35,6 +50,9 @@ const PostList = () => {
       >
         +
       </Link>
+      {isFetchingNextPage && <PostSkeleton />}
+
+      <div ref={observerRef} />
     </div>
   )
 }
