@@ -2,9 +2,31 @@ import http from '../axios'
 
 export const POSTS_ENDPOINTS = {
   POST_LIST: '/boards',
+  CATEGORY: '/boards/categories',
 } as const
 
-export interface Posts {}
+export interface Posts {
+  id: number
+  title: string
+  category: string
+  createdAt: string
+}
+
+export interface Post extends Omit<Posts, 'category'> {
+  content: string
+  boardCategory: string
+  imageUrl: string
+}
+
+export interface Category {
+  NOTICE: '공지'
+  FREE: '자유'
+  QNA: 'Q&A'
+  ETC: '기타'
+}
+
+export type WritePostRequsetParams = Pick<Post, 'title' | 'content'> &
+  Pick<Posts, 'category'>
 
 const getPostList = async () => {
   const response = await http.get<BaseResponse<Posts[]>>(
@@ -13,4 +35,17 @@ const getPostList = async () => {
   return response.data
 }
 
-export { getPostList }
+const getCartegory = async () => {
+  const response = await http.get<Category>(POSTS_ENDPOINTS.CATEGORY)
+  return response.data
+}
+
+const writePost = async (params: WritePostRequsetParams) => {
+  const response = await http.post<Pick<Posts, 'id'>>(
+    POSTS_ENDPOINTS.POST_LIST,
+    params
+  )
+  return response.data
+}
+
+export { getPostList, getCartegory, writePost }
