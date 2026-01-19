@@ -42,9 +42,9 @@ export default function CategorySelectBox({
       <button
         type="button"
         onClick={toggleVisible}
-        className={`hover:border-primary flex w-full items-center justify-between rounded-md border px-3 py-2 text-sm ${isError ? 'border-red-500' : 'border-gray-400'}`}
+        className={`hover:border-primary flex w-full items-center justify-between rounded-md border px-3 py-2 text-sm ${isError ? 'border-red-500' : categoryVisible ? 'border-primary' : 'border-gray-200'}`}
       >
-        <span className="text-gray-400">
+        <span>
           {data && categoryKey ? data[categoryKey] : '카테고리를 선택해주세요'}
         </span>
         <svg
@@ -64,9 +64,7 @@ export default function CategorySelectBox({
 
       {/* Dropdown */}
       {categoryVisible && (
-        <div className="absolute z-10 mt-2 w-full overflow-hidden rounded-md border border-gray-400 bg-white shadow-lg">
-          {/* className={`focus:border-primary flex w-full items-center justify-between rounded-md border px-3 py-2 text-sm ${isError ? 'border-red-500' : 'border-gray-400'}`} */}
-
+        <div className="absolute z-10 mt-2 w-full overflow-hidden rounded-md border border-gray-200 bg-white shadow-lg">
           <ul className="max-h-48 overflow-y-auto py-2">
             {data &&
               (Object.entries(data) as [CategoryKey, string][]).map(
@@ -74,7 +72,7 @@ export default function CategorySelectBox({
                   <li
                     key={key}
                     onClick={() => handleValueClick(key)}
-                    className="cursor-pointer px-3 py-2 text-sm hover:bg-gray-100"
+                    className="cursor-pointer px-3 py-2 text-sm transition-colors hover:bg-gray-100"
                   >
                     {value}
                   </li>

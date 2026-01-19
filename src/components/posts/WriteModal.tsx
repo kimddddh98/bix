@@ -5,6 +5,7 @@ import CategorySelectBox from './CategorySelectBox'
 import useWritePostMutation from '@/hooks/mutations/posts/useWritePostMutation'
 import useEditPostMutation from '@/hooks/mutations/posts/useEditPostMutation'
 import { useMemo } from 'react'
+import { useRouter } from 'next/navigation'
 
 type WriteModalProps = {
   post?: Post
@@ -12,6 +13,8 @@ type WriteModalProps = {
 
 const WriteModal = ({ post }: WriteModalProps) => {
   const isEdit = !!post
+  const router = useRouter()
+
   const { mutate: writeMutate, isPending: isWritePending } =
     useWritePostMutation()
   const { mutate: editMutate, isPending: isEditPending } = useEditPostMutation()
@@ -52,80 +55,93 @@ const WriteModal = ({ post }: WriteModalProps) => {
     }
   }
 
+  const handleClose = () => {
+    router.back()
+  }
   return (
-    <div
-      className="w-full max-w-md rounded-2xl bg-white shadow-xl"
-      onClick={(e) => e.stopPropagation()}
-    >
-      {/* Header */}
-      <header className="flex items-center justify-between border-b border-b-gray-400 px-4 py-3">
-        <button type="button" className="text-sm text-gray-500">
-          취소
-        </button>
-        <h2 className="text-base font-semibold text-gray-900">
-          글 {isEdit ? '수정' : '작성'}
-        </h2>
-        <button type="button" className="text-sm font-medium text-black">
-          등록
-        </button>
-      </header>
-
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col gap-4 px-4 py-4"
+    <>
+      <div
+        onClick={handleClose}
+        className="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
+      />
+      <div
+        className="animate-slide-in fixed top-0 right-0 z-50 h-full w-full bg-white shadow-2xl md:w-2/3 lg:w-1/2 xl:w-2/5"
+        onClick={(e) => e.stopPropagation()}
       >
-        {/* Title */}
-        <div className="space-y-1">
-          <label className="block text-sm font-medium text-gray-700">
-            제목
-          </label>
-          <input
-            type="text"
-            placeholder="제목을 입력해주세요"
-            className={`focus:border-primary w-full rounded-md border px-3 py-2 text-sm ${errors.title ? 'border-red-500' : 'border-gray-400'}`}
-            {...register('title', {
-              required: '제목을 입력해주세요',
-            })}
-          />
-        </div>
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="flex h-full flex-col"
+        >
+          <div className="flex h-16 items-center justify-between border-b border-gray-200 px-6">
+            <span className="text-lg font-medium text-gray-700">
+              글 {isEdit ? '수정' : '작성'}
+              {/* {category && post && category[post.boardCategory]} */}
+            </span>
+            <button onClick={handleClose} className="p-2">
+              X
+            </button>
+          </div>
+          <div className="flex flex-1 flex-col gap-4 px-4 py-4">
+            {/* Title */}
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-700">
+                제목
+              </label>
+              <input
+                type="text"
+                placeholder="제목을 입력해주세요"
+                className={`focus:border-primary w-full rounded-md border px-3 py-2 text-sm ${errors.title ? 'border-red-500' : 'border-gray-200'}`}
+                {...register('title', {
+                  required: '제목을 입력해주세요',
+                })}
+              />
+            </div>
 
-        <div className="space-y-1">
-          <label className="block text-sm font-medium text-gray-700">
-            카테고리
-          </label>
-          <input
-            type="hidden"
-            {...register('category', {
-              required: '카테고리를 선택해주세요',
-            })}
-          />
-          <CategorySelectBox
-            categoryKey={category}
-            isError={!!errors.category}
-            onChangeValue={handleSelect}
-          />
-        </div>
+            <div className="space-y-1">
+              <label className="block text-sm font-medium text-gray-700">
+                카테고리
+              </label>
+              <input
+                type="hidden"
+                {...register('category', {
+                  required: '카테고리를 선택해주세요',
+                })}
+              />
+              <CategorySelectBox
+                categoryKey={category}
+                isError={!!errors.category}
+                onChangeValue={handleSelect}
+              />
+            </div>
 
-        {/* Body */}
-        <div className="space-y-1">
-          <label className="block text-sm font-medium text-gray-700">
-            내용
-          </label>
-          <textarea
-            rows={6}
-            placeholder="내용을 입력하세요"
-            {...register('content', {
-              required: '내용을 입력해주세요',
-            })}
-            className={`focus:border-primary w-full rounded-md border px-3 py-2 text-sm ${errors.title ? 'border-red-500' : 'border-gray-400'}`}
-          />
-        </div>
-
-        <button type="submit" disabled={isDisable}>
-          전송
-        </button>
-      </form>
-    </div>
+            <div className="space-y-1">
+              <label className="block text-sm font-medium text-gray-700">
+                내용
+              </label>
+              <textarea
+                rows={6}
+                placeholder="내용을 입력하세요"
+                {...register('content', {
+                  required: '내용을 입력해주세요',
+                })}
+                className={`focus:border-primary w-full resize-none rounded-md border px-3 py-2 text-sm ${errors.title ? 'border-red-500' : 'border-gray-200'}`}
+              />
+            </div>
+          </div>
+          <div className="border-t border-gray-200 bg-gray-50 px-6 py-4">
+            <div className="flex gap-3">
+              <button
+                type="submit"
+                disabled={isDisable}
+                className="bg-primary hover:bg-primary-hover flex-1 rounded-lg px-4 py-2 font-medium text-white transition-colors"
+              >
+                {isEdit ? '수정' : '작성'}하기
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </>
   )
 }
 
