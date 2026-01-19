@@ -70,9 +70,31 @@ const writePost = async (params: WritePostRequsetParams) => {
   return response.data
 }
 
-const deletePost = async (id: number) => {
-  const response = await http.delete<Post>(POSTS_ENDPOINTS.POST_LIST + `/${id}`)
+const editPost = async (id: number, params: WritePostRequsetParams) => {
+  const formData = new FormData()
+
+  formData.append(
+    'request',
+    new Blob([JSON.stringify(params)], {
+      type: 'application/json',
+    })
+  )
+
+  const response = await http.patch(
+    POSTS_ENDPOINTS.POST_LIST + `/${id}`,
+    formData,
+    {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    }
+  )
   return response.data
 }
 
-export { getPostList, getCartegory, writePost, getPost, deletePost }
+const deletePost = async (id: number) => {
+  const response = await http.delete(POSTS_ENDPOINTS.POST_LIST + `/${id}`)
+  return response.data
+}
+
+export { getPostList, getCartegory, writePost, getPost, deletePost, editPost }
