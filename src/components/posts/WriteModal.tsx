@@ -4,6 +4,7 @@ import { useForm, useWatch } from 'react-hook-form'
 import CategorySelectBox from './CategorySelectBox'
 import useWritePostMutation from '@/hooks/mutations/posts/useWritePostMutation'
 import useEditPostMutation from '@/hooks/mutations/posts/useEditPostMutation'
+import { useMemo } from 'react'
 
 type WriteModalProps = {
   post?: Post
@@ -11,14 +12,16 @@ type WriteModalProps = {
 
 const WriteModal = ({ post }: WriteModalProps) => {
   const isEdit = !!post
-  const { mutate: writeMutate } = useWritePostMutation()
-  const { mutate: editMutate } = useEditPostMutation()
+  const { mutate: writeMutate, isPending: isWritePending } =
+    useWritePostMutation()
+  const { mutate: editMutate, isPending: isEditPending } = useEditPostMutation()
   const {
     setValue,
     control,
     register,
     handleSubmit,
-    formState: { errors },
+
+    formState: { errors, isSubmitting },
   } = useForm<WritePostRequsetParams>({
     defaultValues: {
       title: post?.title ?? '',
@@ -26,6 +29,10 @@ const WriteModal = ({ post }: WriteModalProps) => {
       category: post?.boardCategory ?? '',
     },
   })
+  const isDisable = useMemo(() => {
+    return isWritePending || isEditPending || isSubmitting
+  }, [isWritePending, isEditPending, isSubmitting])
+
   const category = useWatch({
     control,
     name: 'category',
@@ -114,7 +121,9 @@ const WriteModal = ({ post }: WriteModalProps) => {
           />
         </div>
 
-        <button>전송</button>
+        <button type="submit" disabled={isDisable}>
+          전송
+        </button>
       </form>
     </div>
   )
