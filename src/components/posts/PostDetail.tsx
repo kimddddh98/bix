@@ -2,13 +2,14 @@
 import useDeletePostMutation from '@/hooks/mutations/posts/useDeletePostMutation'
 import useCategoriesQuery from '@/hooks/queries/useCategoriesQuery'
 import usePostQuery from '@/hooks/queries/usePostQuery'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 
 const PostDetail = () => {
   const { id } = useParams<{ id: string }>()
   const { data: category } = useCategoriesQuery()
   const { data } = usePostQuery(Number(id))
   const { mutate } = useDeletePostMutation()
+  const router = useRouter()
   const handleDelete = () => {
     mutate(Number(id))
   }
@@ -31,7 +32,13 @@ const PostDetail = () => {
       <div className="my-8 h-px bg-gray-200" />
 
       <div className="flex justify-end gap-3">
-        <button type="button" className="text-sm text-gray-500">
+        <button
+          onClick={() => {
+            router.push(`/post/${id}/edit`)
+          }}
+          type="button"
+          className="text-sm text-gray-500"
+        >
           수정
         </button>
         <button

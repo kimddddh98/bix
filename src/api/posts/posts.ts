@@ -80,16 +80,11 @@ const editPost = async (id: number, params: WritePostRequsetParams) => {
     })
   )
 
-  const response = await http.patch(
-    POSTS_ENDPOINTS.POST_LIST + `/${id}`,
-    formData,
-    {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    }
-  )
-  return response.data
+  await http.patch<0>(POSTS_ENDPOINTS.POST_LIST + `/${id}`, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  })
 }
 
 const deletePost = async (id: number) => {
