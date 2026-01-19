@@ -1,11 +1,25 @@
 'use client'
 import { WritePostRequsetParams } from '@/api/posts/posts'
-import useCategoriesQuery from '@/hooks/queries/useCategoriesQuery'
 import { useForm } from 'react-hook-form'
 import CategorySelectBox from './CategorySelectBox'
+import { useState } from 'react'
 
 const WriteModal = () => {
-  const {} = useForm<WritePostRequsetParams>()
+  const { setValue, watch } = useForm<WritePostRequsetParams>({
+    defaultValues: {
+      title: '',
+      content: '',
+      category: '',
+    },
+  })
+  const category = watch('category')
+  const [categoryVisible, setCategoryVisible] = useState(false)
+  const handleSelect = (category: string) => {
+    setValue('category', category, {
+      shouldValidate: true,
+      shouldDirty: true,
+    })
+  }
 
   return (
     <div
@@ -40,7 +54,7 @@ const WriteModal = () => {
           <label className="block text-sm font-medium text-gray-700">
             카테고리
           </label>
-          <CategorySelectBox />
+          <CategorySelectBox value={category} onChangeValue={handleSelect} />
         </div>
 
         {/* Body */}
