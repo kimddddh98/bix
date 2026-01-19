@@ -6,7 +6,11 @@ import {
   WritePostRequsetParams,
 } from '@/api/posts/posts'
 import { postsKey } from '@/const/query-key/postsKey'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import {
+  InfiniteData,
+  useMutation,
+  useQueryClient,
+} from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
 
 const useEditPostMutation = () => {
@@ -26,24 +30,31 @@ const useEditPostMutation = () => {
 
       const post = queryClient.getQueryData<Post>(postsKey.post(variables.id))
       if (post && variables.category) {
-        queryClient.setQueryData<BaseResponse<Posts[]>>(
+        queryClient.setQueryData<InfiniteData<PagenationResponse<Posts[]>>>(
           postsKey.postList(),
           (olddata) => {
-            if (olddata) {
-              const posts = olddata?.content
-              if (posts) {
-                const updatedPosts = posts.map((r) => {
-                  if (r.id === variables.id) {
-                    return {
-                      ...r,
-                      title: variables.title,
-                      category: variables.category as CategoryKey,
-                    }
+            if (!olddata) return olddata
+
+            const updatedPages = olddata.pages.map((page) => {
+              const updatedContent = page.content.map((post) => {
+                if (post.id === variables.id) {
+                  return {
+                    ...post,
+                    title: variables.title,
+                    category: variables.category as CategoryKey,
                   }
-                  return r
-                })
-                return { content: updatedPosts }
+                }
+                return post
+              })
+
+              return {
+                ...page,
+                content: updatedContent,
               }
+            })
+            return {
+              ...olddata,
+              pages: updatedPages,
             }
           }
         )

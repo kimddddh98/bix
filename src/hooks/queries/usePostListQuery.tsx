@@ -8,7 +8,6 @@ const usePostListQuery = () => {
     queryKey: postsKey.postList(),
     initialPageParam: 0,
     getNextPageParam: (lastPage) => {
-      // 🔥 여기 핵심
       if (lastPage.last) return undefined
       return lastPage.number + 1
     },
