@@ -1,10 +1,15 @@
 'use client'
+import useDeletePostMutation from '@/hooks/mutations/posts/useDeletePostMutation'
 import usePostQuery from '@/hooks/queries/usePostQuery'
 import { useParams } from 'next/navigation'
 
 const PostDetail = () => {
   const { id } = useParams<{ id: string }>()
   const { data } = usePostQuery(Number(id))
+  const { mutate } = useDeletePostMutation()
+  const handleDelete = () => {
+    mutate(Number(id))
+  }
   return (
     <main className="px-4 py-6">
       <div className="mb-2 flex items-center gap-2 text-sm text-gray-500">
@@ -27,7 +32,11 @@ const PostDetail = () => {
         <button type="button" className="text-sm text-gray-500">
           수정
         </button>
-        <button type="button" className="text-sm font-medium text-red-600">
+        <button
+          onClick={handleDelete}
+          type="button"
+          className="text-sm font-medium text-red-600"
+        >
           삭제
         </button>
       </div>

@@ -70,4 +70,9 @@ const writePost = async (params: WritePostRequsetParams) => {
   return response.data
 }
 
-export { getPostList, getCartegory, writePost, getPost }
+const deletePost = async (id: number) => {
+  const response = await http.delete<Post>(POSTS_ENDPOINTS.POST_LIST + `/${id}`)
+  return response.data
+}
+
+export { getPostList, getCartegory, writePost, getPost, deletePost }
