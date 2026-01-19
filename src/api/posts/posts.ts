@@ -8,13 +8,13 @@ export const POSTS_ENDPOINTS = {
 export interface Posts {
   id: number
   title: string
-  category: string
+  category: CategoryKey
   createdAt: string
 }
 
 export interface Post extends Omit<Posts, 'category'> {
   content: string
-  boardCategory: string
+  boardCategory: CategoryKey
   imageUrl: string
 }
 
