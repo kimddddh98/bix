@@ -19,10 +19,10 @@ export interface Post extends Omit<Posts, 'category'> {
 }
 
 export interface Category {
-  NOTICE: '공지'
-  FREE: '자유'
-  QNA: 'Q&A'
-  ETC: '기타'
+  NOTICE: string
+  FREE: string
+  QNA: string
+  ETC: string
 }
 
 export type WritePostRequsetParams = Pick<Post, 'title' | 'content'> &
