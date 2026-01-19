@@ -1,15 +1,18 @@
 'use Client'
 
+import { CategoryKey } from '@/api/posts/posts'
 import useCategoriesQuery from '@/hooks/queries/useCategoriesQuery'
 import { useEffect, useRef, useState } from 'react'
 
 type CategorySelectBoxProps = {
-  value: string
-  onChangeValue: (category: string) => void
+  categoryKey: CategoryKey | ''
+  isError: boolean
+  onChangeValue: (category: CategoryKey) => void
 }
 
 export default function CategorySelectBox({
-  value,
+  categoryKey,
+  isError,
   onChangeValue,
 }: CategorySelectBoxProps) {
   const { data } = useCategoriesQuery()
@@ -19,8 +22,8 @@ export default function CategorySelectBox({
   const toggleVisible = () => {
     setCategoryVisible((prev) => !prev)
   }
-  const handleValueClick = (value: string) => {
-    onChangeValue(value)
+  const handleValueClick = (key: CategoryKey) => {
+    onChangeValue(key)
     setCategoryVisible(false)
   }
 
@@ -39,11 +42,13 @@ export default function CategorySelectBox({
       <button
         type="button"
         onClick={toggleVisible}
-        className="flex w-full items-center justify-between rounded-xl border bg-white px-3 py-2 text-sm"
+        className={`hover:border-primary flex w-full items-center justify-between rounded-md border px-3 py-2 text-sm ${isError ? 'border-red-500' : 'border-gray-400'}`}
       >
-        <span className="text-gray-400">{value}</span>
+        <span className="text-gray-400">
+          {data && categoryKey ? data[categoryKey] : '카테고리를 선택해주세요'}
+        </span>
         <svg
-          className="h-4 w-4 text-gray-500"
+          className={`h-4 w-4 text-gray-500 ${categoryVisible && 'rotate-180'}`}
           fill="none"
           stroke="currentColor"
           strokeWidth={2}
@@ -59,18 +64,22 @@ export default function CategorySelectBox({
 
       {/* Dropdown */}
       {categoryVisible && (
-        <div className="absolute z-10 mt-2 w-full overflow-hidden rounded-xl border bg-white shadow-lg">
+        <div className="absolute z-10 mt-2 w-full overflow-hidden rounded-md border border-gray-400 bg-white shadow-lg">
+          {/* className={`focus:border-primary flex w-full items-center justify-between rounded-md border px-3 py-2 text-sm ${isError ? 'border-red-500' : 'border-gray-400'}`} */}
+
           <ul className="max-h-48 overflow-y-auto py-2">
             {data &&
-              Object.values(data).map((value) => (
-                <li
-                  key={value}
-                  onClick={() => handleValueClick(value)}
-                  className="cursor-pointer px-3 py-2 text-sm hover:bg-gray-100"
-                >
-                  {value}
-                </li>
-              ))}
+              (Object.entries(data) as [CategoryKey, string][]).map(
+                ([key, value]) => (
+                  <li
+                    key={key}
+                    onClick={() => handleValueClick(key)}
+                    className="cursor-pointer px-3 py-2 text-sm hover:bg-gray-100"
+                  >
+                    {value}
+                  </li>
+                )
+              )}
           </ul>
         </div>
       )}

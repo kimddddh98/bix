@@ -25,8 +25,11 @@ export interface Category {
   ETC: string
 }
 
-export type WritePostRequsetParams = Pick<Post, 'title' | 'content'> &
-  Pick<Posts, 'category'>
+export type CategoryKey = keyof Category
+
+export type WritePostRequsetParams = Pick<Post, 'title' | 'content'> & {
+  category: CategoryKey | ''
+}
 
 const getPostList = async () => {
   const response = await http.get<BaseResponse<Posts[]>>(
@@ -41,9 +44,23 @@ const getCartegory = async () => {
 }
 
 const writePost = async (params: WritePostRequsetParams) => {
+  const formData = new FormData()
+
+  formData.append(
+    'request',
+    new Blob([JSON.stringify(params)], {
+      type: 'application/json',
+    })
+  )
+
   const response = await http.post<Pick<Posts, 'id'>>(
     POSTS_ENDPOINTS.POST_LIST,
-    params
+    formData,
+    {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    }
   )
   return response.data
 }

@@ -1,11 +1,18 @@
 'use client'
-import { WritePostRequsetParams } from '@/api/posts/posts'
+import { CategoryKey, WritePostRequsetParams } from '@/api/posts/posts'
 import { useForm } from 'react-hook-form'
 import CategorySelectBox from './CategorySelectBox'
-import { useState } from 'react'
+import useWritePostMutation from '@/hooks/mutations/posts/useWritePostMutation'
 
 const WriteModal = () => {
-  const { setValue, watch } = useForm<WritePostRequsetParams>({
+  const { mutate } = useWritePostMutation()
+  const {
+    setValue,
+    watch,
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<WritePostRequsetParams>({
     defaultValues: {
       title: '',
       content: '',
@@ -13,12 +20,16 @@ const WriteModal = () => {
     },
   })
   const category = watch('category')
-  const [categoryVisible, setCategoryVisible] = useState(false)
-  const handleSelect = (category: string) => {
+
+  const handleSelect = (category: CategoryKey) => {
     setValue('category', category, {
       shouldValidate: true,
       shouldDirty: true,
     })
+  }
+  const onSubmit = (value: WritePostRequsetParams) => {
+    console.log('폼 전송', value)
+    mutate(value)
   }
 
   return (
@@ -37,7 +48,10 @@ const WriteModal = () => {
         </button>
       </header>
 
-      <div className="flex flex-col gap-4 px-4 py-4">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="flex flex-col gap-4 px-4 py-4"
+      >
         {/* Title */}
         <div className="space-y-1">
           <label className="block text-sm font-medium text-gray-700">
@@ -45,8 +59,11 @@ const WriteModal = () => {
           </label>
           <input
             type="text"
-            placeholder="제목을 입력하세요"
-            className="w-full rounded-xl border px-3 py-2 text-sm focus:ring-1 focus:ring-black focus:outline-none"
+            placeholder="제목을 입력해주세요"
+            className={`focus:border-primary w-full rounded-md border px-3 py-2 text-sm ${errors.title ? 'border-red-500' : 'border-gray-400'}`}
+            {...register('title', {
+              required: '제목을 입력해주세요',
+            })}
           />
         </div>
 
@@ -54,7 +71,17 @@ const WriteModal = () => {
           <label className="block text-sm font-medium text-gray-700">
             카테고리
           </label>
-          <CategorySelectBox value={category} onChangeValue={handleSelect} />
+          <input
+            type="hidden"
+            {...register('category', {
+              required: '카테고리를 선택해주세요',
+            })}
+          />
+          <CategorySelectBox
+            categoryKey={category}
+            isError={!!errors.category}
+            onChangeValue={handleSelect}
+          />
         </div>
 
         {/* Body */}
@@ -65,10 +92,15 @@ const WriteModal = () => {
           <textarea
             rows={6}
             placeholder="내용을 입력하세요"
-            className="w-full resize-none rounded-xl border px-3 py-2 text-sm focus:ring-1 focus:ring-black focus:outline-none"
+            {...register('content', {
+              required: '내용을 입력해주세요',
+            })}
+            className={`focus:border-primary w-full rounded-md border px-3 py-2 text-sm ${errors.title ? 'border-red-500' : 'border-gray-400'}`}
           />
         </div>
-      </div>
+
+        <button>전송</button>
+      </form>
     </div>
   )
 }
