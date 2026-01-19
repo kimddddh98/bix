@@ -38,6 +38,11 @@ const getPostList = async () => {
   return response.data
 }
 
+const getPost = async (id: number) => {
+  const response = await http.get<Post>(POSTS_ENDPOINTS.POST_LIST + `/${id}`)
+  return response.data
+}
+
 const getCartegory = async () => {
   const response = await http.get<Category>(POSTS_ENDPOINTS.CATEGORY)
   return response.data
@@ -65,4 +70,4 @@ const writePost = async (params: WritePostRequsetParams) => {
   return response.data
 }
 
-export { getPostList, getCartegory, writePost }
+export { getPostList, getCartegory, writePost, getPost }
