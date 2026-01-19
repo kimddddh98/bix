@@ -35,7 +35,7 @@ const useDeletePostMutation = () => {
           }
         }
       )
-      router.replace('/')
+      router.back()
     },
   })
 }
