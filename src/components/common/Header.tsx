@@ -1,4 +1,4 @@
-'use cilent'
+'use client'
 
 import useAuth from '@/hooks/auth/useAuth'
 
