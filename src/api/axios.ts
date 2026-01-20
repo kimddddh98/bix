@@ -17,7 +17,6 @@ export const httpServer = axios.create({
     'Content-Type': 'application/json',
   },
 })
-
 http.interceptors.request.use(
   async (config) => {
     const token = useAuthStore.getState().accessToken
@@ -41,25 +40,25 @@ http.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config
     console.log('시작', error)
-    // if (error.response?.status === 401 && !originalRequest._retry) {
-    //   originalRequest._retry = true
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true
 
-    //   try {
-    //     const data = await rotateTokenApi()
-    //     const { accessToken } = data
-    //     useAuthStore.getState().actions.setAccessToken(accessToken)
-    //     originalRequest.headers.Authorization = `Bearer ${accessToken}`
-    //     return http(originalRequest)
-    //   } catch (error) {
-    //     useAuthStore.getState().actions.logout()
-    //     return Promise.reject(error)
-    //   }
-    // }
-    // if (error.response?.status === 401 || error.response?.status === 403) {
-    //   await logout()
-    //   useAuthStore.getState().actions.logout()
-    //   window.location.href = '/signin'
-    // }
+      try {
+        const data = await rotateTokenApi()
+        const { accessToken } = data
+        useAuthStore.getState().actions.setAccessToken(accessToken)
+        originalRequest.headers.Authorization = `Bearer ${accessToken}`
+        return http(originalRequest)
+      } catch (error) {
+        useAuthStore.getState().actions.logout()
+        return Promise.reject(error)
+      }
+    }
+    if (error.response?.status === 401 || error.response?.status === 403) {
+      await logout()
+      useAuthStore.getState().actions.logout()
+      window.location.href = '/signin'
+    }
 
     return Promise.reject(error)
   }
