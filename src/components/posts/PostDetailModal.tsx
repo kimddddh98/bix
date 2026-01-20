@@ -6,10 +6,12 @@ import usePostQuery from '@/hooks/queries/usePostQuery'
 import { formatPostDate } from '@/utiles'
 import { useParams, useRouter } from 'next/navigation'
 import ModalHead from '../common/ModalHead'
+import PostListSkeleton from './PostListSkeleton'
+import PostContentSkeleton from './PostContentSkeleton'
 export default function PostDetailModal() {
   const { id } = useParams<{ id: string }>()
   const { data: category } = useCategoriesQuery()
-  const { data: post } = usePostQuery(Number(id))
+  const { data: post, isFetching: isPostFetching } = usePostQuery(Number(id))
   const { mutate, isPending } = useDeletePostMutation()
   const router = useRouter()
   const handleDelete = () => {
@@ -46,7 +48,9 @@ export default function PostDetailModal() {
             <div className="flex items-center gap-4 border-b border-gray-200 pb-6 text-sm text-gray-600"></div>
 
             <div className="max-w-none py-4">
-              <p className="leading-relaxed text-gray-700">{post?.content}</p>
+              <p className="leading-relaxed text-gray-700">
+                {isPostFetching ? <PostContentSkeleton /> : post?.content}
+              </p>
             </div>
           </div>
 
