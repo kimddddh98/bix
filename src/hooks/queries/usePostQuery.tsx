@@ -1,15 +1,18 @@
 import { getPost, Post, Posts } from '@/api/posts/posts'
 import { postsKey } from '@/const/query-key/postsKey'
+import { useAuthStore } from '@/store/auth/authStore'
 import { InfiniteData, useQuery, useQueryClient } from '@tanstack/react-query'
 
 const usePostQuery = (id: number) => {
+  const accessToken = useAuthStore((state) => state.accessToken)
+
   const queryClient = useQueryClient()
   return useQuery({
     queryFn: () => {
       return getPost(id)
     },
     queryKey: postsKey.post(id),
-    enabled: !!id,
+    enabled: !!id && !!accessToken,
     placeholderData: () => {
       const data = queryClient.getQueryData<
         InfiniteData<PagenationResponse<Posts[]>>
