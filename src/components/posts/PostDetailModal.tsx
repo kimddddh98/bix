@@ -6,7 +6,6 @@ import usePostQuery from '@/hooks/queries/usePostQuery'
 import { formatPostDate } from '@/utiles'
 import { useParams, useRouter } from 'next/navigation'
 import ModalHead from '../common/ModalHead'
-import PostListSkeleton from './PostListSkeleton'
 import PostContentSkeleton from './PostContentSkeleton'
 import { useScrollLock } from '@/hooks/common/useScrollLock'
 export default function PostDetailModal() {
@@ -50,9 +49,11 @@ export default function PostDetailModal() {
             <div className="flex items-center gap-4 border-b border-gray-200 pb-6 text-sm text-gray-600"></div>
 
             <div className="max-w-none py-4">
-              <p className="leading-relaxed text-gray-700">
-                {isPostFetching ? <PostContentSkeleton /> : post?.content}
-              </p>
+              {isPostFetching ? (
+                <PostContentSkeleton />
+              ) : (
+                <p className="leading-relaxed text-gray-700">{post?.content}</p>
+              )}
             </div>
           </div>
 
