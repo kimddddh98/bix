@@ -70,7 +70,7 @@ const rotateToken = async (refreshToken: string) => {
       refreshToken,
     }
   )
-  return response.data
+  return response
 }
 
 const rotateTokenApi = async () => {

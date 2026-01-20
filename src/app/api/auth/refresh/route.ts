@@ -8,24 +8,26 @@ export async function POST(request: Request) {
     const refreshToken = cookieStore.get('refreshToken')
 
     if (refreshToken?.value) {
-      const data = await rotateToken(refreshToken.value)
+      const res = await rotateToken(refreshToken.value)
 
       const cookieStore = await cookies()
-      cookieStore.set('refreshToken', data.refreshToken, {
+      cookieStore.set('refreshToken', res.data.refreshToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'lax',
         path: '/',
       })
 
-      cookieStore.set('accessToken', data.accessToken, {
+      cookieStore.set('accessToken', res.data.accessToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'lax',
         path: '/',
       })
 
-      return NextResponse.json(data)
+      return NextResponse.json(res, {
+        status: res.status,
+      })
     }
   } catch (error: any) {
     if (error.response) {

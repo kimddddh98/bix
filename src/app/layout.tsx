@@ -29,13 +29,14 @@ export default async function RootLayout({
 }>) {
   const cookieStore = await cookies()
   const accessToken = cookieStore.get('accessToken')
+  console.log(accessToken)
 
   return (
     <html lang="ko">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <HydrationToken accessToken={accessToken?.value ?? null} />
+        {/* <HydrationToken accessToken={accessToken?.value ?? null} /> */}
         <QueryProvider>
           {children} {modal}
         </QueryProvider>
