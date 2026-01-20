@@ -8,6 +8,10 @@ export async function POST() {
     path: '/',
     maxAge: 0,
   })
+  response.cookies.set('accessToken', '', {
+    path: '/',
+    maxAge: 0,
+  })
 
   return response
 }

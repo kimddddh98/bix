@@ -8,9 +8,15 @@ export async function POST(request: Request) {
 
     const data = await signIn(body)
 
-    if (data.refreshToken) {
+    if (data.refreshToken && data.accessToken) {
       const cookieStore = await cookies()
       cookieStore.set('refreshToken', data.refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        path: '/',
+      })
+      cookieStore.set('accessToken', data.accessToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'lax',

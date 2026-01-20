@@ -1,6 +1,6 @@
 import { getPostList } from '@/api/posts/posts'
 import { postsKey } from '@/const/query-key/postsKey'
-import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
+import { useInfiniteQuery } from '@tanstack/react-query'
 
 const usePostListQuery = () => {
   return useInfiniteQuery({

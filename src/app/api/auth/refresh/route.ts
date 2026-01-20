@@ -18,12 +18,21 @@ export async function POST(request: Request) {
         path: '/',
       })
 
+      cookieStore.set('accessToken', data.accessToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        path: '/',
+      })
+
       return NextResponse.json(data)
     }
   } catch (error: any) {
-    return NextResponse.json(error, {
-      status: error.response.status,
-    })
+    if (error.response) {
+      return NextResponse.json(error, {
+        status: error.response.status,
+      })
+    }
   }
   return NextResponse.json(
     { message: '로그인이 만료되었습니다.' },
