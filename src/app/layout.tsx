@@ -3,7 +3,6 @@ import { Geist, Geist_Mono } from 'next/font/google'
 import './globals.css'
 import QueryProvider from '@/providers/QueryProvider'
 import { cookies } from 'next/headers'
-import HydrationToken from '@/hooks/HydrationToken'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -36,7 +35,6 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {/* <HydrationToken accessToken={accessToken?.value ?? null} /> */}
         <QueryProvider>
           {children} {modal}
         </QueryProvider>

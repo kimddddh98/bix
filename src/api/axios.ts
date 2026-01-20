@@ -10,6 +10,7 @@ export const http = axios.create({
   },
 })
 
+// api route handler 에서 사용할 인스턴스
 export const httpServer = axios.create({
   baseURL: URL.baseUrl,
   timeout: 10000,
@@ -58,6 +59,7 @@ http.interceptors.response.use(
       await logout()
       useAuthStore.getState().actions.logout()
       window.location.href = '/signin'
+      alert('로그인이 만료되었습니다. 다시 로그인 해주세요.')
     }
 
     return Promise.reject(error)

@@ -11,8 +11,7 @@ export async function serverFetch<T = unknown>(
 ): Promise<T> {
   const cookieStore = await cookies()
   const accessToken = cookieStore.get('accessToken')
-
-  const url = endpoint.startsWith('http')
+  const url = endpoint.startsWith('/api')
     ? endpoint
     : `${URL.baseUrl}${endpoint}`
 

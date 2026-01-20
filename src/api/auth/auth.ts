@@ -1,5 +1,6 @@
 import URL from '@/const/urls.const'
 import http, { httpServer } from '../axios'
+import axios from 'axios'
 // import URL from '@/const/urls.const'
 
 export const AUTH_BASE = '/auth'
@@ -74,7 +75,8 @@ const rotateToken = async (refreshToken: string) => {
 }
 
 const rotateTokenApi = async () => {
-  const response = await http.post<SignInResponse>(
+  // 토큰 재발급 함수는 interceptors 로 반복 호출 되지 않게 axios 사용
+  const response = await axios.post<SignInResponse>(
     AUTH_ENDPOINTS.SERVER_ROTEATE_TOKEN
   )
   return response.data
