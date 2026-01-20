@@ -1,12 +1,16 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import { PROTECTED_ROUTES, ROUTES } from './const/route.const'
+import { ROUTES } from './const/route.const'
 
 export default function proxy(request: NextRequest) {
   const { nextUrl, cookies } = request
   const refreshToken = cookies.get('refreshToken')
 
-  if (nextUrl.pathname === ROUTES.SIGN_IN && refreshToken) {
+  if (
+    (nextUrl.pathname === ROUTES.SIGN_IN ||
+      nextUrl.pathname === ROUTES.SIGN_UP) &&
+    refreshToken
+  ) {
     return NextResponse.redirect(new URL('/', request.url))
   }
 
