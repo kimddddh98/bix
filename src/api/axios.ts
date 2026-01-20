@@ -39,8 +39,9 @@ http.interceptors.response.use(
       try {
         const data = await rotateTokenApi()
         const { accessToken } = data
-
-        useAuthStore.getState().actions.setAccessToken(accessToken)
+        if (useAuthStore.getState().hasHydrated) {
+          useAuthStore.getState().actions.setAccessToken(accessToken)
+        }
         originalRequest.headers.Authorization = `Bearer ${accessToken}`
 
         return http(originalRequest)
