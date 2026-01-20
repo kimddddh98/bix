@@ -43,7 +43,7 @@ const useWritePostMutation = () => {
           }
         )
       }
-      router.back()
+      router.replace(`/post/${id}`)
     },
   })
 }

@@ -16,7 +16,7 @@ export interface Posts {
 export interface Post extends Omit<Posts, 'category'> {
   content: string
   boardCategory: CategoryKey
-  imageUrl: string
+  imageUrl: string | null
 }
 
 export interface Category {

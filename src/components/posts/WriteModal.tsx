@@ -6,12 +6,15 @@ import useWritePostMutation from '@/hooks/mutations/posts/useWritePostMutation'
 import useEditPostMutation from '@/hooks/mutations/posts/useEditPostMutation'
 import { useMemo } from 'react'
 import { useRouter } from 'next/navigation'
+import ModalHead from '../common/ModalHead'
+import { useScrollLock } from '@/hooks/common/useScrollLock'
 
 type WriteModalProps = {
   post?: Post
 }
 
 const WriteModal = ({ post }: WriteModalProps) => {
+  useScrollLock()
   const isEdit = !!post
   const router = useRouter()
 
@@ -56,7 +59,11 @@ const WriteModal = ({ post }: WriteModalProps) => {
   }
 
   const handleClose = () => {
-    router.back()
+    if (isEdit) {
+      router.replace(`/post/${post.id}`)
+    } else {
+      router.back()
+    }
   }
   return (
     <>
@@ -72,15 +79,10 @@ const WriteModal = ({ post }: WriteModalProps) => {
           onSubmit={handleSubmit(onSubmit)}
           className="flex h-full flex-col"
         >
-          <div className="flex h-16 items-center justify-between border-b border-gray-200 px-6">
-            <span className="text-lg font-medium text-gray-700">
-              글 {isEdit ? '수정' : '작성'}
-              {/* {category && post && category[post.boardCategory]} */}
-            </span>
-            <button onClick={handleClose} className="p-2">
-              X
-            </button>
-          </div>
+          <ModalHead
+            title={`글 ${isEdit ? '수정' : '작성'}`}
+            onClose={handleClose}
+          />
           <div className="flex flex-1 flex-col gap-4 px-4 py-4">
             {/* Title */}
             <div className="space-y-2">
@@ -90,7 +92,7 @@ const WriteModal = ({ post }: WriteModalProps) => {
               <input
                 type="text"
                 placeholder="제목을 입력해주세요"
-                className={`focus:border-primary w-full rounded-md border px-3 py-2 text-sm ${errors.title ? 'border-red-500' : 'border-gray-200'}`}
+                className={`w-full rounded-md border px-3 py-2 text-sm ${errors.title ? 'border-red-500' : 'focus:border-primary border-gray-200'}`}
                 {...register('title', {
                   required: '제목을 입력해주세요',
                 })}
@@ -124,7 +126,7 @@ const WriteModal = ({ post }: WriteModalProps) => {
                 {...register('content', {
                   required: '내용을 입력해주세요',
                 })}
-                className={`focus:border-primary w-full resize-none rounded-md border px-3 py-2 text-sm ${errors.title ? 'border-red-500' : 'border-gray-200'}`}
+                className={`w-full resize-none rounded-md border px-3 py-2 text-sm ${errors.content ? 'border-red-500' : 'focus:border-primary border-gray-200'}`}
               />
             </div>
           </div>
