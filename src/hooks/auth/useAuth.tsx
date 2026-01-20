@@ -31,6 +31,15 @@ const useAuth = () => {
       onSuccess(data, variables) {
         onSubmitLogin(variables)
       },
+      onError(error: any) {
+        if (error?.response?.data) {
+          if (error.response.data.username) {
+            alert(error.response.data.username.join('/n'))
+          }
+        } else {
+          alert('회원가입에 실패했습니다. 입력된 값을 다시 확인해주세요.')
+        }
+      },
     })
   }
 
