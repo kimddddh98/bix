@@ -21,15 +21,19 @@ const useEditPostMutation = () => {
       const { id, ...p } = params
       return editPost(id, p)
     },
-    onSuccess: async (data, variables) => {
-      router.back()
+    onMutate: async (variables) => {
+      await queryClient.cancelQueries({ queryKey: postsKey.postList() })
+      await queryClient.cancelQueries({ queryKey: postsKey.post(variables.id) })
 
-      await queryClient.invalidateQueries({
-        queryKey: postsKey.post(variables.id),
-      })
+      const previousPostListData = queryClient.getQueryData<
+        InfiniteData<PagenationResponse<Posts[]>>
+      >(postsKey.postList())
 
-      const post = queryClient.getQueryData<Post>(postsKey.post(variables.id))
-      if (post && variables.category) {
+      const previousPostData = queryClient.getQueryData<Post>(
+        postsKey.post(variables.id)
+      )
+
+      if (variables.category) {
         queryClient.setQueryData<InfiniteData<PagenationResponse<Posts[]>>>(
           postsKey.postList(),
           (olddata) => {
@@ -59,6 +63,37 @@ const useEditPostMutation = () => {
           }
         )
       }
+
+      if (previousPostData) {
+        queryClient.setQueryData<Post>(postsKey.post(variables.id), {
+          ...previousPostData,
+          title: variables.title,
+          content: variables.content,
+          boardCategory: variables.category as CategoryKey,
+        })
+      }
+
+      return { previousPostListData, previousPostData }
+    },
+    onError: (error, variables, context) => {
+      if (context?.previousPostListData) {
+        queryClient.setQueryData(
+          postsKey.postList(),
+          context.previousPostListData
+        )
+      }
+      if (context?.previousPostData) {
+        queryClient.setQueryData(
+          postsKey.post(variables.id),
+          context.previousPostData
+        )
+      }
+    },
+    onSuccess: () => {
+      router.back()
+    },
+    onSettled: (data, error, variables) => {
+      queryClient.invalidateQueries({ queryKey: postsKey.post(variables.id) })
     },
   })
 }
