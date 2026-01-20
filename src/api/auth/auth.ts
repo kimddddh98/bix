@@ -1,5 +1,5 @@
 import URL from '@/const/urls.const'
-import http from '../axios'
+import http, { httpServer } from '../axios'
 // import URL from '@/const/urls.const'
 
 export const AUTH_BASE = '/auth'
@@ -43,7 +43,7 @@ export interface SignInResponse {
 }
 
 const signIn = async (params: SignInRequestParams) => {
-  const response = await http.post<SignInResponse>(
+  const response = await httpServer.post<SignInResponse>(
     AUTH_ENDPOINTS.SIGN_IN,
     params
   )
@@ -64,7 +64,7 @@ const signUp = async (params: SignUpRequestParams) => {
 }
 
 const rotateToken = async (refreshToken: string) => {
-  const response = await http.post<SignInResponse>(
+  const response = await httpServer.post<SignInResponse>(
     AUTH_ENDPOINTS.ROTEATE_TOKEN,
     {
       refreshToken,
