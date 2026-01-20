@@ -8,7 +8,9 @@ import { useParams, useRouter } from 'next/navigation'
 import ModalHead from '../common/ModalHead'
 import PostListSkeleton from './PostListSkeleton'
 import PostContentSkeleton from './PostContentSkeleton'
+import { useScrollLock } from '@/hooks/common/useScrollLock'
 export default function PostDetailModal() {
+  useScrollLock()
   const { id } = useParams<{ id: string }>()
   const { data: category } = useCategoriesQuery()
   const { data: post, isFetching: isPostFetching } = usePostQuery(Number(id))

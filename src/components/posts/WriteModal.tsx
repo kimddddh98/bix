@@ -7,12 +7,14 @@ import useEditPostMutation from '@/hooks/mutations/posts/useEditPostMutation'
 import { useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import ModalHead from '../common/ModalHead'
+import { useScrollLock } from '@/hooks/common/useScrollLock'
 
 type WriteModalProps = {
   post?: Post
 }
 
 const WriteModal = ({ post }: WriteModalProps) => {
+  useScrollLock()
   const isEdit = !!post
   const router = useRouter()
 
@@ -90,7 +92,7 @@ const WriteModal = ({ post }: WriteModalProps) => {
               <input
                 type="text"
                 placeholder="제목을 입력해주세요"
-                className={`focus:border-primary w-full rounded-md border px-3 py-2 text-sm ${errors.title ? 'border-red-500' : 'border-gray-200'}`}
+                className={`w-full rounded-md border px-3 py-2 text-sm ${errors.title ? 'border-red-500' : 'focus:border-primary border-gray-200'}`}
                 {...register('title', {
                   required: '제목을 입력해주세요',
                 })}
@@ -124,7 +126,7 @@ const WriteModal = ({ post }: WriteModalProps) => {
                 {...register('content', {
                   required: '내용을 입력해주세요',
                 })}
-                className={`focus:border-primary w-full resize-none rounded-md border px-3 py-2 text-sm ${errors.title ? 'border-red-500' : 'border-gray-200'}`}
+                className={`w-full resize-none rounded-md border px-3 py-2 text-sm ${errors.content ? 'border-red-500' : 'focus:border-primary border-gray-200'}`}
               />
             </div>
           </div>
