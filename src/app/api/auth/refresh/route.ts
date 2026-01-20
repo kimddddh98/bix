@@ -30,6 +30,7 @@ export async function POST(request: Request) {
       })
     }
   } catch (error: any) {
+    console.log(error)
     return NextResponse.json(
       { message: '로그인이 만료되었습니다.' },
       { status: 401 }
