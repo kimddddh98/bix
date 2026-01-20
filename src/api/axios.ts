@@ -39,28 +39,18 @@ http.interceptors.response.use(
       try {
         const data = await rotateTokenApi()
         const { accessToken } = data
-        if (useAuthStore.getState().hasHydrated) {
-          useAuthStore.getState().actions.setAccessToken(accessToken)
-        }
+        useAuthStore.getState().actions.setAccessToken(accessToken)
         originalRequest.headers.Authorization = `Bearer ${accessToken}`
-        console.log('originalRequest', originalRequest)
         return http(originalRequest)
       } catch (error) {
-        console.log('catch', error)
-
-        if (useAuthStore.getState().hasHydrated) {
-          useAuthStore.getState().actions.logout()
-        }
+        useAuthStore.getState().actions.logout()
         return Promise.reject(error)
       }
     }
     if (error.response?.status === 401 || error.response?.status === 403) {
       await logout()
-      if (useAuthStore.getState().hasHydrated) {
-        useAuthStore.getState().actions.logout()
-      }
+      useAuthStore.getState().actions.logout()
       window.location.href = '/signin'
-      // alert('로그인이 만료되었습니다. 다시 로그인 해주세요.')
     }
 
     return Promise.reject(error)

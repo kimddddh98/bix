@@ -1,5 +1,6 @@
 'use client'
 
+import { rotateTokenApi } from '@/api/auth/auth'
 import useAuth from '@/hooks/auth/useAuth'
 
 const Header = () => {
@@ -12,7 +13,7 @@ const Header = () => {
         </span>
         <button
           type="button"
-          onClick={onLogout}
+          onClick={rotateTokenApi}
           className="bg-primary hover:bg-primary-hover rounded-lg px-3 py-2 text-sm font-medium text-white"
         >
           로그아웃
