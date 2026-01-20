@@ -9,7 +9,7 @@ export default function PostDetailModal() {
   const { id } = useParams<{ id: string }>()
   const { data: category } = useCategoriesQuery()
   const { data: post } = usePostQuery(Number(id))
-  const { mutate } = useDeletePostMutation()
+  const { mutate, isPending } = useDeletePostMutation()
   const router = useRouter()
   const handleDelete = () => {
     const value = confirm('글을 삭제하시겠습니까?')
@@ -57,6 +57,7 @@ export default function PostDetailModal() {
           <div className="border-t border-gray-200 bg-gray-50 px-6 py-4">
             <div className="flex gap-3">
               <button
+                disabled={isPending}
                 onClick={handleDelete}
                 className="flex-1 rounded-lg border border-red-500 bg-white px-4 py-2 font-medium text-red-600 transition-colors hover:bg-red-500 hover:text-white"
               >
