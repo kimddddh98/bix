@@ -25,7 +25,11 @@ http.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
     }
-    if (config.url && !config.url.startsWith('/api')) {
+    if (
+      config.url &&
+      !config.url.startsWith('/api') &&
+      !config.url.startsWith('/proxy')
+    ) {
       config.url = '/proxy' + config.url
     }
 
@@ -59,7 +63,6 @@ http.interceptors.response.use(
       await logout()
       useAuthStore.getState().actions.logout()
       window.location.href = '/signin'
-      alert('로그인이 만료되었습니다. 다시 로그인 해주세요.')
     }
 
     return Promise.reject(error)
