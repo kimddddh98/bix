@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import './globals.css'
 import QueryProvider from '@/providers/QueryProvider'
+import { cookies } from 'next/headers'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -18,13 +19,17 @@ export const metadata: Metadata = {
   description: '빅스페이먼츠 프론트엔드 과제 사이트입니다.',
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
   modal,
 }: Readonly<{
   children: React.ReactNode
   modal: React.ReactNode
 }>) {
+  const cookieStore = await cookies()
+  const accessToken = cookieStore.get('accessToken')
+  console.log(accessToken)
+
   return (
     <html lang="ko">
       <body

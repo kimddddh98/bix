@@ -10,6 +10,14 @@ export const http = axios.create({
   },
 })
 
+// api route handler 에서 사용할 인스턴스
+export const httpServer = axios.create({
+  baseURL: URL.baseUrl,
+  timeout: 10000,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+})
 http.interceptors.request.use(
   async (config) => {
     const token = useAuthStore.getState().accessToken
@@ -17,10 +25,14 @@ http.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
     }
-
-    if (config.url && !config.url.startsWith(URL.apiRouteUrl)) {
-      config.url = URL.baseUrl + config.url
+    if (
+      config.url &&
+      !config.url.startsWith('/api') &&
+      !config.url.startsWith('/proxy')
+    ) {
+      config.url = '/proxy' + config.url
     }
+
     return config
   },
   (error) => {
@@ -32,17 +44,15 @@ http.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config
-
+    console.log('시작', error)
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true
 
       try {
         const data = await rotateTokenApi()
         const { accessToken } = data
-
         useAuthStore.getState().actions.setAccessToken(accessToken)
         originalRequest.headers.Authorization = `Bearer ${accessToken}`
-
         return http(originalRequest)
       } catch (error) {
         useAuthStore.getState().actions.logout()
@@ -53,7 +63,6 @@ http.interceptors.response.use(
       await logout()
       useAuthStore.getState().actions.logout()
       window.location.href = '/signin'
-      alert('로그인이 만료되었습니다. 다시 로그인 해주세요.')
     }
 
     return Promise.reject(error)

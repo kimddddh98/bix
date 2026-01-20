@@ -7,35 +7,40 @@ export async function POST(request: Request) {
     const cookieStore = await cookies() //
     const refreshToken = cookieStore.get('refreshToken')
 
+    if (!refreshToken) {
+      return NextResponse.json(
+        { message: '로그인이 만료되었습니다.' },
+        { status: 401 }
+      )
+    }
+
     if (refreshToken?.value) {
-      const data = await rotateToken(refreshToken.value)
+      const res = await rotateToken(refreshToken.value)
 
       const cookieStore = await cookies()
-      cookieStore.set('refreshToken', data.refreshToken, {
+      cookieStore.set('refreshToken', res.data.refreshToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'lax',
         path: '/',
       })
 
-      cookieStore.set('accessToken', data.accessToken, {
+      cookieStore.set('accessToken', res.data.accessToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'lax',
         path: '/',
       })
 
-      return NextResponse.json(data)
+      return NextResponse.json(res.data, {
+        status: res.status,
+      })
     }
   } catch (error: any) {
-    if (error.response) {
-      return NextResponse.json(error, {
-        status: error.response.status,
-      })
-    }
+    console.log(error)
+    return NextResponse.json(
+      { message: '로그인이 만료되었습니다.' },
+      { status: 401 }
+    )
   }
-  return NextResponse.json(
-    { message: '로그인이 만료되었습니다.' },
-    { status: 401 }
-  )
 }

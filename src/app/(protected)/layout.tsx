@@ -1,42 +1,18 @@
-'use client'
-import { logout } from '@/api/auth/auth'
 import Header from '@/components/common/Header'
-import useAuth from '@/hooks/auth/useAuth'
-import { useAuthStore } from '@/store/auth/authStore'
-import { useRouter } from 'next/navigation'
-import React, { useEffect } from 'react'
+import Protected from '@/components/common/ProtectedLayout'
+import { cookies } from 'next/headers'
 
-export default function ProtectedLayout({
+export default async function Layout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  const router = useRouter()
-  const { getRotateToken } = useAuth()
-  const accessToken = useAuthStore((state) => state.accessToken)
-  const hasHydrated = useAuthStore((state) => state.hasHydrated)
-
-  const checkToken = async () => {
-    try {
-      await getRotateToken()
-    } catch (e) {
-      logout()
-      router.replace('/signin')
-    }
-  }
-
-  useEffect(() => {
-    if (!hasHydrated) return
-    if (!accessToken) {
-      checkToken()
-    }
-  }, [hasHydrated])
-
+  const cookieStore = await cookies()
+  const accessToken = cookieStore.get('accessToken')
   return (
     <div>
       <Header />
-
-      {children}
+      <Protected accessToken={accessToken?.value ?? null}>{children}</Protected>
     </div>
   )
 }

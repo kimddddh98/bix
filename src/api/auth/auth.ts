@@ -1,5 +1,6 @@
 import URL from '@/const/urls.const'
-import http from '../axios'
+import http, { httpServer } from '../axios'
+import axios from 'axios'
 // import URL from '@/const/urls.const'
 
 export const AUTH_BASE = '/auth'
@@ -43,7 +44,7 @@ export interface SignInResponse {
 }
 
 const signIn = async (params: SignInRequestParams) => {
-  const response = await http.post<SignInResponse>(
+  const response = await httpServer.post<SignInResponse>(
     AUTH_ENDPOINTS.SIGN_IN,
     params
   )
@@ -64,17 +65,18 @@ const signUp = async (params: SignUpRequestParams) => {
 }
 
 const rotateToken = async (refreshToken: string) => {
-  const response = await http.post<SignInResponse>(
+  const response = await httpServer.post<SignInResponse>(
     AUTH_ENDPOINTS.ROTEATE_TOKEN,
     {
       refreshToken,
     }
   )
-  return response.data
+  return response
 }
 
 const rotateTokenApi = async () => {
-  const response = await http.post<SignInResponse>(
+  // 토큰 재발급 함수는 interceptors 로 반복 호출 되지 않게 axios 사용
+  const response = await axios.post<SignInResponse>(
     AUTH_ENDPOINTS.SERVER_ROTEATE_TOKEN
   )
   return response.data
