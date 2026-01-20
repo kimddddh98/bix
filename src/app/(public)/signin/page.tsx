@@ -31,7 +31,7 @@ export default function SignIn() {
               <input
                 type="email"
                 placeholder="이메일을 입력해주세요"
-                className={`focus:border-primary w-full rounded-md border px-3 py-2 text-sm ${errors.username ? 'border-red-500' : 'border-gray-400'}`}
+                className={`w-full rounded-md border px-3 py-2 text-sm ${errors.username ? 'border-red-500' : 'focus:border-primary border-gray-400'}`}
                 {...register('username', {
                   required: '이메일을 입력해주세요.',
                   pattern: {
@@ -55,7 +55,7 @@ export default function SignIn() {
             <input
               placeholder="비밀번호를 입력해주세요"
               type="password"
-              className={`focus:border-primary rounded-md border px-3 py-2 text-sm ${errors.password ? 'border-red-500' : 'border-gray-400'}`}
+              className={`rounded-md border px-3 py-2 text-sm ${errors.password ? 'border-red-500' : 'focus:border-primary border-gray-400'}`}
               {...register('password', {
                 required: '비밀번호를 입력해주세요',
                 minLength: {
