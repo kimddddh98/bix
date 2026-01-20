@@ -18,12 +18,9 @@ export async function serverFetch<T = unknown>(
 
   const headers: HeadersInit = {
     'Content-Type': 'application/json',
+    // 토큰이 있으면 Authorization 헤더 추가
+    Authorization: accessToken?.value ? `Bearer ${accessToken.value}` : '',
     ...options.headers,
-  }
-
-  // 토큰이 있으면 Authorization 헤더 추가
-  if (accessToken?.value) {
-    headers.Authorization = `Bearer ${accessToken.value}`
   }
 
   const response = await fetch(url, {
