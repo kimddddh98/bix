@@ -59,8 +59,13 @@ export default function SignIn() {
               {...register('password', {
                 required: '비밀번호를 입력해주세요',
                 minLength: {
-                  value: 6,
-                  message: '비밀번호는 최소 6자 이상입니다',
+                  value: 8,
+                  message: '비밀번호는 최소 8자 이상이어야 합니다',
+                },
+                pattern: {
+                  value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,}$/,
+                  message:
+                    '비밀번호는 영문자, 숫자, 특수문자(!%*#?&)를 각각 1개 이상 포함해야 합니다',
                 },
               })}
             />
