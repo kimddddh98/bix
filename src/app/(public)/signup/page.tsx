@@ -7,7 +7,7 @@ import { SignUpRequestParams } from '@/api/auth/auth'
 import useAuth from '@/hooks/auth/useAuth'
 
 export default function SignupPage() {
-  const { onSubmitSignUp } = useAuth()
+  const { onSubmitSignUp, isSignUpPending } = useAuth()
   const {
     register,
     handleSubmit,
@@ -128,7 +128,7 @@ export default function SignupPage() {
 
           <button
             type="submit"
-            disabled={isSubmitting}
+            disabled={isSubmitting || isSignUpPending}
             className="bg-primary enabled:hover:bg-primary-hover w-full rounded-lg py-2 text-sm font-medium text-white disabled:opacity-50"
           >
             회원가입
