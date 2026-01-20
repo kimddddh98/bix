@@ -51,6 +51,8 @@ const useAuth = () => {
     onSubmitSignUp,
     getRotateToken,
     onLogout,
+    isSignUpPending: signUpMutation.isPending,
+    isSignInPending: signInMutation.isPending,
   }
 }
 

@@ -6,7 +6,7 @@ import { SignInRequestParams } from '@/api/auth/auth'
 import useAuth from '@/hooks/auth/useAuth'
 
 export default function SignIn() {
-  const { onSubmitLogin } = useAuth()
+  const { onSubmitLogin, isSignInPending } = useAuth()
   const {
     register,
     handleSubmit,
@@ -78,7 +78,7 @@ export default function SignIn() {
 
           <button
             type="submit"
-            disabled={isSubmitting}
+            disabled={isSubmitting || isSignInPending}
             className="bg-primary enabled:hover:bg-primary-hover w-full rounded-lg py-2 text-sm font-medium text-white disabled:opacity-50"
           >
             로그인
