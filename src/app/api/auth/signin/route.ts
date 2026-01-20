@@ -19,10 +19,13 @@ export async function POST(request: Request) {
     }
     return NextResponse.json(data)
   } catch (error: any) {
-    if (error.response) {
+    if (error?.response) {
       return NextResponse.json(error.response.data, {
-        status: error.response.status,
+        status: error.status,
       })
     }
+    return NextResponse.json(error, {
+      status: 500,
+    })
   }
 }

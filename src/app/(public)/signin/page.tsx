@@ -6,7 +6,7 @@ import { SignInRequestParams } from '@/api/auth/auth'
 import useAuth from '@/hooks/auth/useAuth'
 
 export default function SignIn() {
-  const { onSubmitLogin } = useAuth()
+  const { onSubmitLogin, isSignInPending } = useAuth()
   const {
     register,
     handleSubmit,
@@ -31,7 +31,7 @@ export default function SignIn() {
               <input
                 type="email"
                 placeholder="이메일을 입력해주세요"
-                className={`focus:border-primary w-full rounded-md border px-3 py-2 text-sm ${errors.username ? 'border-red-500' : 'border-gray-400'}`}
+                className={`w-full rounded-md border px-3 py-2 text-sm ${errors.username ? 'border-red-500' : 'focus:border-primary border-gray-400'}`}
                 {...register('username', {
                   required: '이메일을 입력해주세요.',
                   pattern: {
@@ -55,12 +55,17 @@ export default function SignIn() {
             <input
               placeholder="비밀번호를 입력해주세요"
               type="password"
-              className={`focus:border-primary rounded-md border px-3 py-2 text-sm ${errors.password ? 'border-red-500' : 'border-gray-400'}`}
+              className={`rounded-md border px-3 py-2 text-sm ${errors.password ? 'border-red-500' : 'focus:border-primary border-gray-400'}`}
               {...register('password', {
                 required: '비밀번호를 입력해주세요',
                 minLength: {
-                  value: 6,
-                  message: '비밀번호는 최소 6자 이상입니다',
+                  value: 8,
+                  message: '비밀번호는 최소 8자 이상이어야 합니다',
+                },
+                pattern: {
+                  value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,}$/,
+                  message:
+                    '비밀번호는 영문자, 숫자, 특수문자(!%*#?&)를 각각 1개 이상 포함해야 합니다',
                 },
               })}
             />
@@ -73,7 +78,7 @@ export default function SignIn() {
 
           <button
             type="submit"
-            disabled={isSubmitting}
+            disabled={isSubmitting || isSignInPending}
             className="bg-primary enabled:hover:bg-primary-hover w-full rounded-lg py-2 text-sm font-medium text-white disabled:opacity-50"
           >
             로그인

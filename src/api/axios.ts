@@ -53,6 +53,7 @@ http.interceptors.response.use(
       await logout()
       useAuthStore.getState().actions.logout()
       window.location.href = '/signin'
+      alert('로그인이 만료되었습니다. 다시 로그인 해주세요.')
     }
 
     return Promise.reject(error)
