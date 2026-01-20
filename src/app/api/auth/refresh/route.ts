@@ -7,6 +7,13 @@ export async function POST(request: Request) {
     const cookieStore = await cookies() //
     const refreshToken = cookieStore.get('refreshToken')
 
+    if (!refreshToken) {
+      return NextResponse.json(
+        { message: '로그인이 만료되었습니다.' },
+        { status: 401 }
+      )
+    }
+
     if (refreshToken?.value) {
       const res = await rotateToken(refreshToken.value)
 
