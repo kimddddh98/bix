@@ -57,7 +57,11 @@ const WriteModal = ({ post }: WriteModalProps) => {
   }
 
   const handleClose = () => {
-    router.back()
+    if (isEdit) {
+      router.replace(`/post/${post.id}`)
+    } else {
+      router.back()
+    }
   }
   return (
     <>
