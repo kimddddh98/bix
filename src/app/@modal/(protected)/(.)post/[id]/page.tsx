@@ -1,5 +1,5 @@
-import { getPost } from '@/api/posts/posts'
-import PostDetail from '@/components/posts/PostDetail'
+import { Post, POSTS_ENDPOINTS } from '@/api/posts/posts'
+import { serverGet } from '@/api/serverFetch'
 import PostDetailModal from '@/components/posts/PostDetailModal'
 import { postsKey } from '@/const/query-key/postsKey'
 import {
@@ -18,9 +18,9 @@ export default async function PostDetailPage({ params }: PageProps) {
 
   queryClinet.prefetchQuery({
     queryKey: postsKey.post(Number(id)),
-    queryFn: ({ queryKey }) => {
-      const [_, postId] = queryKey
-      return getPost(postId)
+    queryFn: async ({ queryKey }) => {
+      const [, postId] = queryKey
+      return serverGet<Post>(`${POSTS_ENDPOINTS.POST_LIST}/${postId}`)
     },
   })
 
