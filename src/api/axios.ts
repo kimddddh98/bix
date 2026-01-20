@@ -32,7 +32,7 @@ http.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config
-
+    console.log('시작', error)
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true
 
@@ -43,16 +43,22 @@ http.interceptors.response.use(
           useAuthStore.getState().actions.setAccessToken(accessToken)
         }
         originalRequest.headers.Authorization = `Bearer ${accessToken}`
-
+        console.log('originalRequest', originalRequest)
         return http(originalRequest)
       } catch (error) {
-        useAuthStore.getState().actions.logout()
+        console.log('catch', error)
+
+        if (useAuthStore.getState().hasHydrated) {
+          useAuthStore.getState().actions.logout()
+        }
         return Promise.reject(error)
       }
     }
     if (error.response?.status === 401 || error.response?.status === 403) {
       await logout()
-      useAuthStore.getState().actions.logout()
+      if (useAuthStore.getState().hasHydrated) {
+        useAuthStore.getState().actions.logout()
+      }
       window.location.href = '/signin'
       alert('로그인이 만료되었습니다. 다시 로그인 해주세요.')
     }
