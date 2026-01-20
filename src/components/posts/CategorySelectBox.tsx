@@ -44,7 +44,7 @@ export default function CategorySelectBox({
         onClick={toggleVisible}
         className={`hover:border-primary flex w-full items-center justify-between rounded-md border px-3 py-2 text-sm ${isError ? 'border-red-500' : categoryVisible ? 'border-primary' : 'border-gray-200'}`}
       >
-        <span>
+        <span className={`${categoryKey === '' ? 'text-gray-400' : ''}`}>
           {data && categoryKey ? data[categoryKey] : '카테고리를 선택해주세요'}
         </span>
         <svg
