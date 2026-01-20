@@ -29,9 +29,20 @@ export async function POST(request: Request) {
     }
   } catch (error: any) {
     if (error.response) {
-      return NextResponse.json(error, {
+      const response = NextResponse.json(error, {
         status: error.response.status,
       })
+      if (error.response.status === 401 || error.response.status === 403) {
+        response.cookies.set('refreshToken', '', {
+          path: '/',
+          maxAge: 0,
+        })
+        response.cookies.set('accessToken', '', {
+          path: '/',
+          maxAge: 0,
+        })
+      }
+      return response
     }
   }
   return NextResponse.json(
