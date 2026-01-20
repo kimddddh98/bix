@@ -5,6 +5,7 @@ import useCategoriesQuery from '@/hooks/queries/useCategoriesQuery'
 import usePostQuery from '@/hooks/queries/usePostQuery'
 import { formatPostDate } from '@/utiles'
 import { useParams, useRouter } from 'next/navigation'
+import ModalHead from '../common/ModalHead'
 export default function PostDetailModal() {
   const { id } = useParams<{ id: string }>()
   const { data: category } = useCategoriesQuery()
@@ -30,15 +31,10 @@ export default function PostDetailModal() {
 
       <div className="animate-slide-in fixed top-0 right-0 z-50 h-full w-full bg-white shadow-2xl md:w-2/3 lg:w-1/2 xl:w-2/5">
         <div className="flex h-full flex-col">
-          <div className="flex h-16 items-center justify-between border-b border-gray-200 px-6">
-            <span className="text-lg font-medium text-gray-700">
-              {category && post && category[post.boardCategory]}
-            </span>
-            <button onClick={handleClose} className="p-2">
-              X
-            </button>
-          </div>
-
+          <ModalHead
+            onClose={handleClose}
+            title={(category && post && category[post.boardCategory]) ?? ''}
+          />
           <div className="flex-1 overflow-y-auto p-6">
             <div className="flex items-center justify-between">
               <h3 className="text-xl font-bold text-gray-900">{post?.title}</h3>

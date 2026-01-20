@@ -6,6 +6,7 @@ import useWritePostMutation from '@/hooks/mutations/posts/useWritePostMutation'
 import useEditPostMutation from '@/hooks/mutations/posts/useEditPostMutation'
 import { useMemo } from 'react'
 import { useRouter } from 'next/navigation'
+import ModalHead from '../common/ModalHead'
 
 type WriteModalProps = {
   post?: Post
@@ -72,15 +73,10 @@ const WriteModal = ({ post }: WriteModalProps) => {
           onSubmit={handleSubmit(onSubmit)}
           className="flex h-full flex-col"
         >
-          <div className="flex h-16 items-center justify-between border-b border-gray-200 px-6">
-            <span className="text-lg font-medium text-gray-700">
-              글 {isEdit ? '수정' : '작성'}
-              {/* {category && post && category[post.boardCategory]} */}
-            </span>
-            <button onClick={handleClose} className="p-2">
-              X
-            </button>
-          </div>
+          <ModalHead
+            title={`글 ${isEdit ? '수정' : '작성'}`}
+            onClose={handleClose}
+          />
           <div className="flex flex-1 flex-col gap-4 px-4 py-4">
             {/* Title */}
             <div className="space-y-2">
