@@ -12,7 +12,13 @@ const useDeletePostMutation = () => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: deletePost,
-    onSuccess: (_, id) => {
+    onMutate: async (id) => {
+      await queryClient.cancelQueries({ queryKey: postsKey.postList() })
+
+      const previousData = queryClient.getQueryData<
+        InfiniteData<PagenationResponse<Posts[]>>
+      >(postsKey.postList())
+
       queryClient.setQueryData<InfiniteData<PagenationResponse<Posts[]>>>(
         postsKey.postList(),
         (olddata) => {
@@ -35,6 +41,15 @@ const useDeletePostMutation = () => {
           }
         }
       )
+
+      return { previousData }
+    },
+    onError: (error, id, context) => {
+      if (context?.previousData) {
+        queryClient.setQueryData(postsKey.postList(), context.previousData)
+      }
+    },
+    onSuccess: () => {
       router.back()
     },
   })
