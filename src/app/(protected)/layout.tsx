@@ -1,10 +1,8 @@
 'use client'
 import { logout } from '@/api/auth/auth'
-import http from '@/api/axios'
 import Header from '@/components/common/Header'
 import useAuth from '@/hooks/auth/useAuth'
 import { useAuthStore } from '@/store/auth/authStore'
-import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import React, { useEffect } from 'react'
 
