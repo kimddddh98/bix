@@ -8,6 +8,7 @@ import { useParams, useRouter } from 'next/navigation'
 import ModalHead from '../common/ModalHead'
 import PostContentSkeleton from './PostContentSkeleton'
 import { useScrollLock } from '@/hooks/common/useScrollLock'
+import { ROUTES } from '@/const/route.const'
 export default function PostDetailModal() {
   useScrollLock()
   const { id } = useParams<{ id: string }>()
@@ -68,7 +69,7 @@ export default function PostDetailModal() {
               </button>
               <button
                 onClick={() => {
-                  router.push(`/post/${id}/edit`)
+                  router.push(ROUTES.EDIT_POST(Number(id)))
                 }}
                 className="bg-primary hover:bg-primary-hover flex-1 rounded-lg px-4 py-2 font-medium text-white transition-colors"
               >

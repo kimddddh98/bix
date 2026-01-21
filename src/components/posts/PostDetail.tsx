@@ -1,4 +1,5 @@
 'use client'
+import { ROUTES } from '@/const/route.const'
 import useDeletePostMutation from '@/hooks/mutations/posts/useDeletePostMutation'
 import useCategoriesQuery from '@/hooks/queries/useCategoriesQuery'
 import usePostQuery from '@/hooks/queries/usePostQuery'
@@ -35,7 +36,7 @@ const PostDetail = () => {
       <div className="flex justify-end gap-3">
         <button
           onClick={() => {
-            router.push(`/post/${id}/edit`)
+            router.push(ROUTES.EDIT_POST(Number(id)))
           }}
           type="button"
           className="text-sm text-gray-500"

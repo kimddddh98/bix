@@ -7,6 +7,7 @@ import Link from 'next/link'
 import PostListSkeleton from './PostListSkeleton'
 import { useObserver } from '@/hooks/common/useObserver'
 import PostSkeleton from './PostSkeleton'
+import { ROUTES } from '@/const/route.const'
 
 const PostList = () => {
   const { data: categories } = useCategoriesQuery()
@@ -45,7 +46,7 @@ const PostList = () => {
       )}
 
       <Link
-        href={'/write'}
+        href={ROUTES.WRITE_POST}
         className="bg-primary fixed right-6 bottom-6 flex h-14 w-14 items-center justify-center rounded-full text-3xl text-white shadow-lg"
       >
         +

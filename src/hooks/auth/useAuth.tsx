@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation'
 import { useAuthActions } from '@/store/auth/authStore'
 import useSignUpMutation from '../mutations/useSignUpMutation'
 import { useQueryClient } from '@tanstack/react-query'
+import { ROUTES } from '@/const/route.const'
 
 const useAuth = () => {
   const { setAccessToken, logout: authStoreLogout } = useAuthActions()
@@ -20,7 +21,7 @@ const useAuth = () => {
   const onSubmitLogin = async (value: SignInRequestParams) => {
     signInMutation.mutate(value, {
       onSuccess(data) {
-        router.replace('/')
+        router.replace(ROUTES.POSTS)
         setAccessToken(data.accessToken)
       },
     })
@@ -52,7 +53,7 @@ const useAuth = () => {
     await logout()
     authStoreLogout()
     queryClient.clear()
-    router.replace('/')
+    router.replace(ROUTES.SIGN_IN)
   }
 
   return {
