@@ -1,4 +1,5 @@
 import { Category, Posts } from '@/api/posts/posts'
+import { ROUTES } from '@/const/route.const'
 import { formatPostDate } from '@/utiles'
 import Link from 'next/link'
 
@@ -12,7 +13,7 @@ const PostListItem = ({ post, categories }: PostListItemProps) => {
     <div className="flex flex-col">
       <Link
         className="rounded-lg border border-gray-200 bg-white p-4 shadow-xs transition-shadow hover:shadow-sm"
-        href={`/post/${post.id}`}
+        href={ROUTES.POST(post.id)}
       >
         <div className="mb-2 flex items-center justify-between">
           <span className="text-sm text-gray-500">

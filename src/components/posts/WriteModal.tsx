@@ -8,6 +8,7 @@ import { useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import ModalHead from '../common/ModalHead'
 import { useScrollLock } from '@/hooks/common/useScrollLock'
+import { ROUTES } from '@/const/route.const'
 
 type WriteModalProps = {
   post?: Post
@@ -60,7 +61,7 @@ const WriteModal = ({ post }: WriteModalProps) => {
 
   const handleClose = () => {
     if (isEdit) {
-      router.replace(`/post/${post.id}`)
+      router.replace(ROUTES.POST(post.id))
     } else {
       router.back()
     }

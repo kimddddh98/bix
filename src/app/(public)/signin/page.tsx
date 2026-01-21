@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form'
 import Link from 'next/link'
 import { SignInRequestParams } from '@/api/auth/auth'
 import useAuth from '@/hooks/auth/useAuth'
+import { ROUTES } from '@/const/route.const'
 
 export default function SignIn() {
   const { onSubmitLogin, isSignInPending } = useAuth()
@@ -88,7 +89,7 @@ export default function SignIn() {
         <div className="mt-6 text-center text-sm text-gray-600">
           아직 계정이 없으신가요?{' '}
           <Link
-            href="/signup"
+            href={ROUTES.SIGN_UP}
             className="text-primary font-medium hover:underline"
           >
             회원가입

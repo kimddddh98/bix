@@ -1,4 +1,5 @@
 'use client'
+import { ROUTES } from '@/const/route.const'
 import { useAuthStore } from '@/store/auth/authStore'
 import { useRouter } from 'next/navigation'
 import React, { useEffect } from 'react'
@@ -15,7 +16,7 @@ export default function ProtectedLayout({
   useEffect(() => {
     if (!hasHydrated) return
     if (accessToken) {
-      router.replace('/')
+      router.replace(ROUTES.POSTS)
     }
   }, [hasHydrated])
 

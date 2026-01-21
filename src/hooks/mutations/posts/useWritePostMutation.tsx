@@ -1,5 +1,6 @@
 import { writePost, Posts, CategoryKey } from '@/api/posts/posts'
 import { postsKey } from '@/const/query-key/postsKey'
+import { ROUTES } from '@/const/route.const'
 import {
   InfiniteData,
   useMutation,
@@ -43,7 +44,7 @@ const useWritePostMutation = () => {
           }
         )
       }
-      router.replace(`/post/${id}`)
+      router.replace(ROUTES.POST(id))
     },
   })
 }

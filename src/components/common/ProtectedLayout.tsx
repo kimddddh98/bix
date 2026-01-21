@@ -1,6 +1,7 @@
 'use client'
 import { logout } from '@/api/auth/auth'
 import Header from '@/components/common/Header'
+import { ROUTES } from '@/const/route.const'
 import useAuth from '@/hooks/auth/useAuth'
 import { useAuthActions, useAuthStore } from '@/store/auth/authStore'
 import { useRouter } from 'next/navigation'
@@ -24,7 +25,7 @@ export default function Protected({
       await getRotateToken()
     } catch (e) {
       logout()
-      router.replace('/signin')
+      router.replace(ROUTES.SIGN_IN)
     }
   }
 
