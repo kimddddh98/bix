@@ -184,4 +184,4 @@ npm run dev
 
 ## 배포 링크
 
-<https://bix-jet.vercel.app/signin>
+<https://bix-jet.vercel.app/>
