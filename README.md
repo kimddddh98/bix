@@ -135,10 +135,10 @@ src/
 - **서버 상태**:
   - Tanstack Query를 사용하여 서버 데이터 상태 관리 및 쿼리 키 정의 후 캐시 관리
   - 글 상세 조회 시 글 목록의 데이터를 활용하여 title, catecory, createdAt 정보 미리 랜더링
+  - 서버 컴포넌트에서의 데이터 페칭을 위해 serverFetch.ts 정의
   - 서버 컴포넌트에서 데이터 prefetch 및 HydrationBoundary 활용하여 미리 데이터 요청
     - 글 목록 페이지 : 글 목록 및 카테고리 prefetch
     - 글 상세 페이지 : 게시글 상세 prefetch
-  - 서버 컴포넌트에서의 데이터 페칭을 위해 serverFetch.ts 정의
   - 글 수정/삭제 시 Mutation - onMutate 사용하여 optimistic update 적용
     - 요청 실패 시 이전 데이터값을 전달하여 데이터 복원
     - 성공 시 데이터 갱신 및 해당 글로 페이지 이동 처리
@@ -155,10 +155,10 @@ src/
 
 - 게시글 목록 IntersectionObserver, Infinite Query 기반 페이지네이션 구현
 - 게시글 수정 시 작성 폼과 동일 컴포넌트 활용하여 재사용
+- react-hook-form을 활용한 입력 필드 검증 및 필드 에러 시 에러 필드 UI 적용
 - 게시글 조회,작성,수정 페이지 Modal Route (@modal) 활용 하여 Modal 형태로 구현
   - 모달이 열렸을 경우 글 목록의 스크롤 비활성화 처리
   - 사용자가 url 직접 입력으로 접근할 경우 리다이렉트
-- react-hook-form을 활용한 입력 필드 검증 및 필드 에러 시 에러 필드 UI 적용
 - 스켈레톤 UI 적용
   - 글 목록 첫 조회 시
   - 글 목록 다음 페이지 조회 시
