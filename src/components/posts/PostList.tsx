@@ -52,7 +52,7 @@ const PostList = () => {
         +
       </Link>
 
-      {isFetchingNextPage && (
+      {!isPending && isFetchingNextPage && (
         <div className="mt-4">
           <PostSkeleton />
         </div>
