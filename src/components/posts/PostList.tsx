@@ -51,7 +51,12 @@ const PostList = () => {
       >
         +
       </Link>
-      {isFetchingNextPage && <PostSkeleton />}
+
+      {isFetchingNextPage && (
+        <div className="mt-4">
+          <PostSkeleton />
+        </div>
+      )}
 
       <div ref={observerRef} />
     </div>
