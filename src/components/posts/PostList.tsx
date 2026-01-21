@@ -47,7 +47,7 @@ const PostList = () => {
 
       <Link
         href={ROUTES.WRITE_POST}
-        className="bg-primary fixed right-6 bottom-6 flex h-14 w-14 items-center justify-center rounded-full text-3xl text-white shadow-lg"
+        className="bg-primary fixed right-6 bottom-6 z-30 flex h-14 w-14 items-center justify-center rounded-full text-3xl text-white shadow-lg"
       >
         +
       </Link>
