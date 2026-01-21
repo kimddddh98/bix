@@ -178,7 +178,7 @@ NEXT_PUBLIC_API_ROUTE_URL=/api
 AND
 
 ```bash
-npm run install
+npm inatll
 npm run dev
 ```
 
